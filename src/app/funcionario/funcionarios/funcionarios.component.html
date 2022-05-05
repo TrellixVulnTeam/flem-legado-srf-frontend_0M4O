@@ -1,0 +1,56 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header card-header-danger">
+        <h3 class="card-title">Funcionários</h3>
+        <p class="card-category"> Lista de Todos os Funcionários Contratados, habilitados e não habilitados, para Registrar Frequência </p>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="card-body table-responsive">
+            <mat-form-field>
+              <input matInput (keyup)="applyFilterTrabalhando($event.target.value)" placeholder="Filtrar">
+            </mat-form-field>
+
+            <mat-table #table [dataSource]="dataSource" matSort>
+              <ng-container matColumnDef="{{ column.id }}" *ngFor="let column of columnNames">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> <b>{{ column.value }}</b> </mat-header-cell>
+
+                <mat-cell *matCellDef="let element">
+                  <div *ngIf="column.id != 'registraFrequencia'">
+                    {{element[column.id]}}
+                  </div>
+                  <div *ngIf="column.id == 'registraFrequencia'">
+                    {{ element[column.id] | boolean : ['Sim', 'Não']}}
+                  </div>
+
+                  <div *ngIf="column.id == 'action'">
+                    <button mat-raised-button (click)="configurar(element.matricula)"class="btn btn-info pull-left">
+                      <i class="material-icons">person</i>Configurar</button>
+                    <!-- <button mat-raised-button (click)="enabled(element)" [hidden]="!element.registraFrequencia"
+                      class="btn btn-warning pull-left">
+                      <i class="material-icons">lock</i>Desabilitar</button> -->
+                  </div>
+
+                </mat-cell>
+
+              </ng-container>
+
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+
+            <mat-paginator 
+                  [hidden]='dataSource.data.length < 11' #paginator 
+                  [length]="dataSource.data.length"
+                  [pageSize]="10" 
+                  [pageSizeOptions]="[10, 20, 50]" 
+                  (page)="paginatorEvent($event)"
+                  [pageIndex]="pageIndex"
+                  showFirstLastButtons></mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

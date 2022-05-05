@@ -1,0 +1,135 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <app-funcionario></app-funcionario>
+
+        <div class="row">
+
+            <div class="card">
+                <div class="card-header card-header-danger">
+                    <h4 class="card-title">Justificar Ausência</h4>
+                </div>
+                <div class="card-body">
+
+                    <form [formGroup]="newForm">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <label for="justificativas">Justificativa</label>
+                                <mat-select style="height: 50px; padding: 5px; padding-left: 15px;"
+                                    formControlName="justificativa" placeholder="Selecione..." name="projetos"
+                                    id="justificativas" (change)="changeJustificativa($event)">
+                                    <mat-optgroup *ngFor="let item of justificativas | groupBy:'descTipoJustificativa'"
+                                        [label]="item.key">
+                                        <mat-option *ngFor="let items of item.value" [value]="items.id">
+                                            {{items.descricao}}
+                                        </mat-option>
+                                    </mat-optgroup>
+                                </mat-select>
+                                <mat-error *ngIf="!newForm.controls.justificativa.valid">Campo Obrigatório</mat-error>
+                            </div>
+                            <div class="col-md-2" *ngIf="isDias">
+                                <label for="dias">Dias:</label>
+                                <input type="number" formControlName="getDias" class="form-control" name="getDias" id="getDias"
+                                    maxlength="3" size="5" >
+                            </div>
+                            <div class="col-md-2" *ngIf="!isDias">
+                                <label for="dias">Dias:</label>
+                                <input type="number" formControlName="dias" class="form-control" name="dias" id="dias" (change)="eventDias()"
+                                    maxlength="3" size="5">
+                                <mat-error *ngIf="isDiasObr">Campo Obrigatório</mat-error>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <label for="filter">Data Inicio</label>
+                                <input matInput [matDatepicker]="pickerInicio" (dateChange)="changeDataInicio($event)"
+                                    formControlName="dataInicio" class="form-control" name="dataInicio" id="dataInicio"
+                                    readonly>
+                                <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+                                <mat-datepicker #pickerInicio></mat-datepicker>
+                                <mat-error *ngIf="!newForm.controls.dataInicio.valid">Campo Obrigatório</mat-error>
+                            </div>
+                            <div class="col-md-5">
+                                <label for="filter">Data Fim</label>
+                                <input matInput  formControlName="dataFim"
+                                    class="form-control" name="dataFim" id="dataFim" readonly>
+                                <!-- <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle> -->
+                                <!-- <mat-datepicker #picker></mat-datepicker> -->
+                                <mat-error *ngIf="!newForm.controls.dataFim.valid">Campo Obrigatório</mat-error>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-5">
+                                <label>
+                                    <input type="file" class="form-control" (change)="upload($event)" #fileInput
+                                        formControlName="file">
+                                </label>
+                            </div>
+                            <div class="col-md-5">
+                                <label for="filter">Descrição Justificativa</label>
+                                <textarea matInput formControlName="observacao" class="form-control" name="observacao"
+                                    id="observacao"></textarea>
+                                <mat-error *ngIf="!newForm.controls.observacao.valid">Campo Obrigatório</mat-error>
+                            </div>
+                        </div>
+                        <br />
+                        <button mat-raised-button (click)="processar()"
+                            class="btn btn-info pull-left">Processar</button>
+                        <div class="clearfix"></div>
+                    </form>
+                    <div *ngIf="enableGrid">
+                        <div class="row">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="text-primary">
+                                        <th>Inicio</th>
+                                        <th>Fim</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                    </thead>
+
+                                    <tbody *ngFor="let f of atestado.diasAbonos">
+                                        <tr class="card-header card-header-danger">
+                                            <td colspan="7">{{f.dataDia | dateHelper: 'dayOfWeek'}} - {{f.dataDia }}
+                                            </td>
+                                            <td>{{ somarHorasAbonadas(f.marcacoes) }}</td>
+                                        </tr>
+                                        <tr *ngFor="let m of f.marcacoes; let i = index">
+                                            <td>
+                                                <input [(ngModel)]="m.hrEntrada.horaMarcacao" size="10"
+                                                    style="text-align: center;" id="entrada"
+                                                    [textMask]="{mask: maskTime}" />
+                                            </td>
+                                            <td>
+                                                <input [(ngModel)]="m.hrSaida.horaMarcacao" size="10"
+                                                    style="text-align: center;" id="entrada"
+                                                    [textMask]="{mask: maskTime}" />
+
+                                                <span (click)="removerIntervalo(i, f)"
+                                                    style="cursor:pointer;margin-top: 50px">
+                                                    <i class="material-icons">delete_forever</i>
+                                                </span>
+                                            </td>
+                                            <td>{{ somarHoras(m.hrEntrada.horaMarcacao, m.hrSaida.horaMarcacao) }}</td>
+                                            <td>{{ m.justificativa }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div [hidden]="!loading" align="center" style="width: 100%">
+                            <h4>Salvando...</h4>
+                            <mat-spinner [diameter]="40"></mat-spinner>
+                        </div>
+                        <div [hidden]="loading">
+                            <button mat-raised-button (click)="confirmar()" *ngIf="atestado"
+                                class="btn btn-info pull-left">Confirmar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>

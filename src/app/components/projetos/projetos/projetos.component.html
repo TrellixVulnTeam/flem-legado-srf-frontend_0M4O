@@ -1,0 +1,16 @@
+<div class="row">
+  <div class="col-md-12">
+      <label for="filter">Projetos:</label>
+    <mat-form-field class="filter-full-width">
+      <input type="text" placeholder="Buscar" aria-label="Number" matInput [formControl]="myControl">
+    </mat-form-field>
+    <input type="checkbox" value="0" name="tudo" (change)="marcarDesmarcar()" [checked]=checked [hidden]="hiddenTodos"/>
+    <b [hidden]="hiddenTodos">Todos os Projetos</b>
+    <div class="flex layout-padding" style="overflow-y: scroll; max-height:200px; padding-left: 25px">
+      <mat-option *ngFor="let item of filteredProjects | async" [value]="item.nome">
+        <input type="checkbox" value="{{item.codigoDominio}}" name="tudo" (change)="onCheckboxChange(item,$event)" [checked]="checked"
+        /> {{item.nome}}
+      </mat-option>
+    </div>
+  </div>
+</div>

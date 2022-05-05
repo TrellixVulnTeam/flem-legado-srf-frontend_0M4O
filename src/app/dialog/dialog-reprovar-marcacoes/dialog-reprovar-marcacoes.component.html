@@ -1,0 +1,41 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="card">
+        <div class="card-header card-header-blueflem" style="text-align:center">
+          <div class="card-title font-weight h4" align="center">
+            <table>
+              <tr>
+                <td>
+                  <b>Reprovar</b>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="card-body text-align-center">
+          <div mat-dialog-content style="font-size: 17px;">
+            <table class="table table-hover">
+              <tr>
+                <td>
+                  <b>Hora da Marcação: </b>{{data.marcacao.horaMarcacao}}</td>
+              </tr>
+            </table>
+            <div>
+              <div>Observação:</div>
+              <textarea class="mdc-text-field__input" maxlength="200" rows="5" style="min-width: 100%" [(ngModel)]="data.observacao"></textarea>
+              <span style="color:red;font-size:80%">Campo Obrigatório</span>
+            </div>
+          </div>
+          <div mat-dialog-actions>
+            <button mat-raised-button class="btn btn-danger" (click)="reprovar()">
+              <i class="material-icons">not_interested</i>Reprovar</button>
+            <button mat-button (click)="onNoClick()" class="btn pull-right" style="background-color: gray;">
+              <i class="material-icons">close</i>Fechar</button>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+export enum TipoMovimento {
+    NORMAL= "Normal",
+    ABONO_CHEFE="Abono Chefia",
+    ABONO_ATES_MED="Atestado Médico",
+    ABONO_CASAMENTO="Abono Casamento",
+    ABONO_FALECIMENTO="Falecimento",
+    ABONO_NAS_FILHO="Licença-Paternidade",
+    ABONO_LIC_MATERN="Licença-Maternidade",
+    ABONO_MT="Abono Meio Turno",
+    ABONO_AMAMENTACAO="Amamentação",
+    AFASTADO="Afastado",
+    ABONO_AFASTADO_MEDICO="Afastamento Médico",
+    FALTA="Falta",
+    ABONO_FERIADO="Fériado Municipal",
+    ABONO_FERIAS="Férias",
+    ABONO_HORA_PAGA="Horas Pagas em folha",
+    ABONO_GREVE="Abono Greve",
+    ABONO_SAIDA_SERVICO="Saída a Serviço",
+    ABONO_VIAGEM="Abono Viagem"
+}

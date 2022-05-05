@@ -1,0 +1,38 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="card">
+        <div class="card-header card-header-blueflem" style="text-align:center">
+          <div class="card-title font-weight h4" align="center">
+            <table>
+              <tr>
+                <td>
+                  <b>Histórico Arquivo</b>
+                </td>
+              </tr>   
+            </table>
+          </div>
+        </div>
+        <div class="card-body text-align-justify"  [hidden]="dados.data.length == 0">
+          <div mat-dialog-content>
+              <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar">
+              </mat-form-field>
+              <mat-table #table [dataSource]="dados" #sort="matSort" matSort>
+                <ng-container matColumnDef="{{ column.id }}" *ngFor="let column of columnNames">
+                  <mat-header-cell *matHeaderCellDef> {{column.value}} </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element[column.id]}} </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              </mat-table>
+              <mat-paginator [length]="dados.data.length" #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+          </div>
+        </div>
+        <div mat-dialog-actions>
+            <button mat-button (click)="onNoClick()" class="btn pull-right" style="background-color:grey;">Fechar</button>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="card">
+        <div class="card-header card-header-blueflem" style="text-align:center">
+          <div class="card-title font-weight h4" align="center">
+            <table>
+              <tr>
+                <td><b>Regularização de Faltas Descontadas</b></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="card-body text-align-justify">
+          <div mat-dialog-content style="font-size: 17px;">
+            <div>
+              <div>Informe a Competência de Pagamento:</div>
+              <!-- <textarea class="mdc-text-field__input" maxlength="250" rows="5" style="min-width: 100%" [(ngModel)]="data.observacao" required></textarea> -->
+              <input type="text" class="mdc-text-field__input"
+                    [textMask]="{mask: mask}" [(ngModel)]="data.competencia" required>
+            </div>
+          </div>
+          <div mat-dialog-actions>
+            <button mat-raised-button class="btn btn-success pull-left" (click)="confirmar()" [hidden]="loading">
+              <i class="material-icons">done</i>Confirmar</button>
+              <div [hidden]="!loading" align="left" style="width: 100%">
+                <h4>Processando...</h4>
+                <mat-spinner [diameter]="20"></mat-spinner>
+              </div>
+            <button mat-button (click)="onNoClick()" class="btn pull-right" style="background-color: gray;">
+              <i class="material-icons">close</i>Fechar</button>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

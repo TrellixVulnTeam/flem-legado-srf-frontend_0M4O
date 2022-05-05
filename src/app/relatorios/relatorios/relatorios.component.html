@@ -1,0 +1,62 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="card">
+        <div class="card-header card-header-danger">
+          <h4 class="card-title">Relatórios</h4>
+          <p class="card-category">Módulo de geração de relatórios</p>
+        </div>
+        <div class="card-body">
+          <form form [formGroup]="form">
+            <div class="row">
+              <div class="col-md-5">
+                <label for="filter">Tipo de Relatório:</label>
+                <mat-select class="form-control" style="height: 50px; padding: 5px; padding-left: 15px;"
+                  formControlName="relatorio" placeholder="Selecione..." name="relatorio"
+                  (change)="tipoRelatorio($event)" required>
+                  <mat-option *ngFor="let item of tipoDeRelatorios | keyValue" [value]="item.key">
+                    {{item.value}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="!form.controls.relatorio.valid">Campo Obrigatório</mat-error>  
+              </div>
+              <div class="col-md-2"  [hidden]="isJustificativa">
+                <label for="filter">Tipo de Justificativa</label>
+                <mat-select class="form-control" style="height: 50px; padding: 5px; padding-left: 15px;"
+                  formControlName="justificativa" placeholder="Selecione..." name="justificativa" (change)="getChange($event)">
+                  <mat-option *ngFor="let item of combTipoDeRelatorios | keyValue" [value]="item.key">
+                    {{item.value}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="jusSelected">Campo Obrigatório</mat-error>  
+              </div>
+              <div class="col-md-2">
+                <label for="filter">Mês Ano Inicio:</label>
+                <input type="text" class="form-control" formControlName="mesAnoInicio" id="mesAnoInicio"
+                  [textMask]="{mask: mask}" required>
+                  <mat-error *ngIf="!form.controls.mesAnoInicio.valid">Campo Obrigatório</mat-error>  
+              </div>
+              <div class="col-md-2" [hidden]="isDataFim">
+                <label for="filter">Mês Ano Fim:</label>
+                <input type="text" class="form-control" formControlName="mesAnoFim" id="mesAnoFim"
+                  [textMask]="{mask: mask}" required>
+              </div>
+            </div>
+            <app-projetos></app-projetos>
+            <mat-error *ngIf="checkedList.length == 0">Campo Obrigatório</mat-error>  
+            <div class="row">
+              <div class="col-md-2">
+                <button mat-raised-button class="btn btn-success pull-left" (click)="exportAsXLSX()" [hidden]="loading">
+                    <img src="/assets/img/icons8-microsoft-excel-48.png" style="width:23px" />Exportar XLSX</button>
+              </div>
+            </div>
+          </form>
+          <div [hidden]="!loading" align="center" style="width: 100%">
+            <h4>Buscando...</h4>
+            <mat-spinner [diameter]="40"></mat-spinner>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- </div -->

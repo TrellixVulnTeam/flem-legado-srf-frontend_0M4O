@@ -1,0 +1,60 @@
+mat-header-cell{
+    font-size: 12px;
+    font-weight: bold;
+}
+  .example-table-container {
+    position: relative;
+    max-height: 400px;
+    overflow: auto;
+  }
+  
+  table {
+    width: 100%;
+  }
+  
+  .example-loading-shade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 56px;
+    right: 0;
+    background: rgba(0, 0, 0, 0.15);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .example-rate-limit-reached {
+    color: #980000;
+    max-width: 360px;
+    text-align: center;
+  }
+  
+  /* Column Widths */
+  .mat-column-matricula {
+    max-width: 70px;
+  }
+  /* Column Widths */
+  .mat-column-registraFrequencia{
+    max-width: 150px;
+    text-align: center;
+  }
+  
+  .mat-column-cpf {
+    max-width: 124px;
+  }
+
+  .mat-column-action {
+    max-width: 150px;
+  }
+  .mat-column-situacao{
+      padding-left: 5px;
+  }
+
+  button{
+    i{
+      margin-left: -20px !important;
+      margin-right: 10px !important;
+    }
+  }

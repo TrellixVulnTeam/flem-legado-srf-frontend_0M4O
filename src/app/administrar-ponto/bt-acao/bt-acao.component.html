@@ -1,0 +1,22 @@
+<div class="row">
+    <button mat-raised-button class="btn btn-danger pull-left" (click)="openDialogFolhaPonto()" *ngIf="hasPermission('anexarFreqSRF')">
+        <i class="material-icons">unarchive</i>Anexar Frequência
+    </button>
+    <div *ngIf="enableAnexo ">
+        <button mat-raised-button class="btn btn-warning pull-left" (click)="downloadFrequencia()" title="baixar frequência">
+            <i class="material-icons">archive</i>Baixar Frequência
+        </button>
+        <button mat-raised-button class="btn btn-success pull-left" (click)="validarFrequencia()" 
+        *ngIf="enableAnexo && hasPermission('validarRegFreq') && !isFolhaValidada ">
+            <i class="material-icons">done</i>Validar Frequência
+        </button>
+    </div>
+    <button mat-raised-button class="btn btn-danger pull-right" (click)="downloadPDF()" *ngIf="!isFolhaValidada && hasPermission('imprimirFreqSRF') || isGeracaoAutomatica">
+        <i class="material-icons">print</i>Imprimir
+    </button>
+    <button mat-raised-button class="btn btn-success pull-right" (click)="disponibilizarFolha()" *ngIf="isFolhaValidada && !isDisponibilizar && hasPermission('disponibilizarFrequencia') && isCodProjetoSaeb ">
+        <i class="material-icons">vertical_align_top</i>Disponibilizar
+    </button>
+    <button mat-raised-button class="btn pull-right" (click)="voltar()" *ngIf="isVoltar"><i class="material-icons">reply</i>Voltar</button>
+    <span *ngIf="isDisponibilizar" style="margin-top: 7px;"><i class="material-icons">assignment_turned_in</i>Frequência Disponibilizada</span>
+</div>

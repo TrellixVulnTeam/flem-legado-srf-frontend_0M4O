@@ -1,0 +1,82 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <app-funcionario></app-funcionario>
+
+        <div class="row">
+
+            <div class="card">
+                <div class="card-header card-header-danger">
+                    <h4 class="card-title">Registrar Frequência Manual</h4>
+                </div>
+                <div class="card-body">
+
+                    <form [formGroup]="newForm">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <label for="filter">Data</label>
+                                <input matInput [matDatepicker]="picker" formControlName="data" class="form-control" name="data" id="data" readonly>
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="filter">Hora</label>
+                                <input matInput formControlName="hora" [textMask]="{mask: maskTime}" class="form-control" name="hora" id="hora">
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-5">
+                                <label for="filter">Justificativa</label>
+                                <mat-select class="form-control" formControlName="justificativa" placeholder="Selecione..." name="justificativa">
+                                    <mat-option *ngFor="let item of justificativas" [value]="item">
+                                        {{item}}
+                                    </mat-option>
+                                </mat-select>
+                            </div>
+                            <div class="col-md-5">
+                                <label for="filter">Observação</label>
+                                <textarea matInput formControlName="observacao" class="form-control" name="observacao" id="observacao"></textarea>
+                            </div>
+
+                        </div>
+
+                        <button mat-raised-button class="btn btn-info pull-left" (click)="adicionar()">
+                            <i class="material-icons">add</i>Adicionar</button>
+                        <div *ngIf="pesquisaAtiva">
+                            <table class="table table-hover" id="marcacoes">
+                                <thead class="text-primary">
+                                    <th>Data</th>
+                                    <th>Hora</th>
+                                    <th>Justificativa</th>
+                                    <th>Observação</th>
+                                    <th>Remover</th>
+                                </thead>
+                                <tbody *ngFor="let m of marcacoes;let i=index">
+                                    <td>{{m.data}}</td>
+                                    <td>{{m.hora}}</td>
+                                    <td>{{m.justificativa}}</td>
+                                    <td>{{m.observacao}}</td>
+                                    <td><span class="btn btn-danger btn-link btn-sm btn-just-icon" (click)="remover(i)"  ><i class="material-icons">delete</i></span></td>
+                                </tbody>
+                            </table>
+                            <div [hidden]="!loading" align="center" style="width: 100%">
+                                <h4>Salvando...</h4>
+                                <mat-spinner [diameter]="40"></mat-spinner>
+                            </div>
+
+                            <div [hidden]="loading">
+                                <button mat-raised-button (click)="registrar()" class="btn btn-info pull-left">
+                                    <i class="material-icons">done</i>Registrar</button>
+                                <div class="clearfix"></div>
+                            </div>
+                            
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>

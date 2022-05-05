@@ -1,0 +1,86 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+
+      <div class="card">
+        <div class="card-header card-header-danger">
+          <h4 class="card-title">Editando Feriado Móvel</h4>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="newForm">
+            <div class="row">
+              <div class="col-md-6">
+                <label for="filter">Descrição:</label>
+                <input type="text" formControlName="descricao" class="form-control" name="descricao" id="descricao"
+                  readonly>
+              </div>
+              <div class="col-md-6">
+                <label for="filter">Data Atual:</label>
+                <input type="text" formControlName="dataAtual" class="form-control" name="dataAtual" id="dataAtual"
+                  readonly>
+              </div>
+
+            </div>
+            <div class="row">
+
+              <div class="col-md-12">
+                <br />
+                <label for="filter">Nova Data</label>
+                <input matInput [matDatepicker]="pickerData" formControlName="data" class="form-control" name="data"
+                  id="data" readonly>
+                <mat-datepicker-toggle matSuffix [for]="pickerData"></mat-datepicker-toggle>
+                <mat-datepicker #pickerData></mat-datepicker>
+              </div>
+            </div>
+            <div>
+              <mat-error *ngIf="!newForm.controls.data.valid">Campo Obrigatório</mat-error>
+            </div>
+
+            <button mat-raised-button (click)="save()" class="btn btn-info pull-left">Mover</button>
+            <button mat-raised-button (click)="cancelar()" class="btn btn-danger pull-right">Cancelar</button>
+            <div class="clearfix"></div>
+          </form>
+
+          <div class="row">
+            <div class="card-body">
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    Histórico de Movimentações
+                    <i class="material-icons">arrow_drop_down</i>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="container-fluid" style="margin-bottom: 15px">
+                  <div class="row">
+                    <div class="table-responsive">
+                      <table class="table table-hover">
+                        <thead class="text-primary">
+                          <th>Nº</th>
+                          <th>Data</th>
+                          <th>Excluir</th>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let item of movimentacoes$ | async ; let i = index">
+                            <td>{{ i+1 }}</td>
+                            <td>{{ item.dataFeriado }}</td>
+                            <td>
+                              <button mat-raised-button type="button" title="Excluir" (click)="delete(item.id.seq)"
+                                class="btn btn-danger btn-link btn-sm btn-just-icon">
+                                <i class="material-icons">delete</i>
+                              </button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+              </mat-expansion-panel>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

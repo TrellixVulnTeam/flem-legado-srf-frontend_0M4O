@@ -1,0 +1,20 @@
+<nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-wrapper pull-left">
+            <a target="_blank" class="navbar-brand"
+                href="http://www.flem.org.br/sistema-eletronico-para-registro-de-frequencia-sera-implantado-na-flem/">
+                Ajuda
+                <i class="material-icons">help</i>
+            </a>
+        </div>
+        <div class="navbar-wrapper pull-right" *ngIf="nomeUsuario" >
+            <i class="material-icons" >person</i>{{nomeUsuario}}
+        </div>
+        <button mat-raised-button class="navbar-toggler" type="button" (click)="sidebarToggle()">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="navbar-toggler-icon icon-bar"></span>
+            <span class="navbar-toggler-icon icon-bar"></span>
+            <span class="navbar-toggler-icon icon-bar"></span>
+        </button>
+    </div>
+</nav>

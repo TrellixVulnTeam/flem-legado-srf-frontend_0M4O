@@ -1,0 +1,61 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <app-funcionario></app-funcionario>
+        <div class="card">
+            <div class="card-header card-header-danger">
+                <h3 class="card-title">Horário de Trabalho</h3>
+                <p class="card-category">Modúlo que exibe a jornada de trabalho ou anexa uma nova jornada de trabalho
+                    com assinatura Ponto Focal/Responsável</p>
+            </div>
+            <div class="card-body" >
+                <form [formGroup]="newForm" *ngIf="jornada.length > 0">
+                    <h3>Jornada de Trabalho</h3>
+                    <div class="row">
+                        <table class="table table-hover" id="lista">
+                            <thead class="text-primary">
+                                <th style="color: dodgerblue">Dia da Semana</th>
+                                <th style="color: dodgerblue">Horários</th>
+                            </thead>
+                            <tbody *ngFor="let jor of jornada;let i=index">
+                                <td>{{jor.diaSemana}}</td>
+                                <td>{{jor.nomeJornada}}</td>
+                            </tbody>
+                        </table>
+                        <div class="col-md-2">
+                            <mat-checkbox formControlName="alterar" id="alterar" (click)="alterar()">Alterar Horário de
+                                trabalho
+                            </mat-checkbox>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="isAlterar">
+                        <div class="col-md-5">
+                            <label>Anexar arquivo</label>
+                            <input type="file" class="form-control" formControlName="file"
+                                (change)="AquivoUpload($event)" #fileInput>
+                        </div>
+                        <div class="col-md-5">
+                            <button mat-raised-button class="btn btn-info pull-left" (click)="adicionar()"
+                                [disabled]="isAnexou">
+                                <i class="material-icons">add</i>Adicionar</button>
+                        </div>
+                    </div>
+                    <div>
+                        <table class="table table-hover" id="lista" *ngIf="listaAtiva">
+                            <thead class="text-primary">
+                                <th style="color: dodgerblue">Arquivo</th>
+                                <th style="color: dodgerblue">Remover</th>
+                            </thead>
+                            <tbody *ngFor="let m of lista;let i=index">
+                                <td>{{m.nome}}</td>
+                                <td><span class="btn btn-danger btn-link btn-sm btn-just-icon" (click)="remover(i)"
+                                        title="Remover"><i class="material-icons">delete</i></span></td>
+                            </tbody>
+                        </table>
+                        <button mat-button class="btn btn-success pull-left" (click)="enviar()" *ngIf="listaAtiva">
+                            <i class="material-icons">vertical_align_top</i>Enviar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

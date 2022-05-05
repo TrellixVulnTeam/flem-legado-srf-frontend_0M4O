@@ -1,0 +1,96 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="card">
+        <div class="card-header card-header-danger">
+          <h4 class="card-title">Frequências Disponiblizadas</h4>
+          <p class="card-category">Frequências Disponiblizadas pela Flem</p>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="newForm">
+            <div class="row">
+              <div class="col-md-2">
+                <label for="filter">Matrícula:</label>
+                <input type="number" class="form-control" formControlName="matricula" id="matricula">
+              </div>
+              <div class="col-md-2">
+                <label for="filter">Mês Ano:</label>
+                <input type="text" class="form-control" formControlName="mesAno" id="mesAno" [textMask]="{mask: mask}">
+              </div>
+              <div class="col-md-2">
+                <button mat-raised-button class="btn btn-info pull-left" (click)="buscar()"
+                  style="margin-top: 25px;margin-left: -2px;">
+                  <i class="material-icons">search</i>Buscar</button>
+              </div>
+            </div>
+          </form>
+          <div [hidden]="!pesquisaAtiva" class="table-responsive">
+            <mat-form-field>
+              <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar">
+            </mat-form-field>
+            <mat-table #table [dataSource]="dados" #sort="matSort" matSort>
+              <ng-container matColumnDef="{{ column.id }}" *ngFor="let column of columnNames">
+                <mat-header-cell *matHeaderCellDef> {{column.value}} </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <span *ngIf="column.id!='idFrquencia' && element.situacaoFrequencia=='APROVADO'"
+                    style="color: green">{{element[column.id]}}</span>
+                  <span *ngIf="column.id!='idFrquencia' && element.situacaoFrequencia=='REPROVADO'"
+                    title="{{element.observacao}}" style="color: red">{{element[column.id]}}</span>
+                  <span
+                    *ngIf="column.id!='idFrquencia' && element.situacaoFrequencia=='DISPONIVEL'">{{element[column.id]}}</span>
+                  <table *ngIf="column.id=='idFrquencia'" [hidden]="element.loading">
+                    <td>
+                      <span style="cursor: pointer;" (click)="downloadPDF(element)" title="Baixar">
+                        <i class="material-icons">cloud_download</i>
+                      </span>
+                    </td>
+                    <td *ngIf="element.situacaoFrequencia=='DISPONIVEL' && hasPermission('validarReprovarSaeb')">
+                      <span style="cursor: pointer;color:green;padding-left:10px;padding-right: 10px;"
+                        (click)="aprovar(element)" title="Aprovar">
+                        <i class="material-icons">done</i>
+                      </span>
+                    </td>
+                    <td *ngIf="element.situacaoFrequencia=='DISPONIVEL' && hasPermission('validarReprovarSaeb')">
+                      <span style="cursor: pointer;color:red" (click)="openDialogConfirm(element)" title="Reprovar">
+                        <i class="material-icons">not_interested</i>
+                      </span>
+                    </td>
+                  </table>
+                  <mat-spinner *ngIf="column.id=='idFrquencia'" [diameter]="40" [hidden]="!element.loading">
+                  </mat-spinner>
+                </mat-cell>
+              </ng-container>
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+            <mat-paginator [length]="dados.data.length" #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+              showFirstLastButtons></mat-paginator>
+          </div>
+          <button mat-raised-button class="btn btn-info pull-left" (click)="baixarEmlote()"
+            style="margin-top: 25px;margin-left: -2px;" [hidden]="!pesquisaAtiva || loading" *ngIf="isBtBaixar"
+            title="Baixa todas as folhas de frenquêcias do mês do filtro">
+            <i class="material-icons">vertical_align_bottom</i>Baixar em Lote</button>
+          <div [hidden]="!loading" align="center" style="width: 100%">
+            <h4>Buscando...</h4>
+            <mat-spinner [diameter]="40"></mat-spinner>
+          </div>
+        </div>
+        <mat-expansion-panel *ngIf="isLinksAtivos">
+          <mat-expansion-panel-header>
+            Links para download
+          </mat-expansion-panel-header>
+          <div class="table-responsive">
+            <table class="table table-hover" style="overflow:scroll">
+              <tbody>
+                <tr *ngFor="let item of listFiles">
+                  <td><span (click)="download(item.link)" class="links">{{ item.nome }}
+                    <img src="/assets/img/iconfinder_icon-124-document-file-zip_315084.png" style="width:23px" /></span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </mat-expansion-panel>
+      </div>
+    </div>
+  </div>
+</div>

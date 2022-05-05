@@ -1,0 +1,54 @@
+<div class="main-content" align="center">
+    <div class="container-fluid col-lg-6 col-md-12">
+        <div class="row">
+            <div class="card">
+                <div class="card-header card-header-danger">
+                    <h4 class="card-title">Registrar Frequência</h4>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="newForm">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h2>{{ data | date:"dd/MM/yyyy HH:mm:ss"}} </h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-left">
+                                <label for="filter">Usuário:</label>
+                                <input type="text" formControlName="nome" class="form-control" name="nome" id="nome">
+                                <mat-error *ngIf="!newForm.controls.nome.valid">Campo Obrigatório</mat-error>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-left">
+                                <label for="filter">Senha:</label>
+                                <input type="password" formControlName="senha" class="form-control" name="senha"
+                                    id="senha">
+                                <mat-error *ngIf="!newForm.controls.senha.valid">Campo Obrigatório</mat-error>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <button [hidden]="loading" mat-raised-button (click)="save()"
+                                class="btn btn-info pull-left {{ isMobileMenu() }}" style="width: 100%">
+                                <i class="material-icons">timer</i> Registrar</button>
+                            <div class="clearfix"></div>
+                            <div [hidden]="!loading" align="center" style="width: 100%">
+                                <h4>Registrando...</h4>
+                                <mat-spinner [diameter]="40"></mat-spinner>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div style="width: 100%">
+                                <a href="http://www.flem.org.br/aviso-e-recibo-de-ferias-poderao-ser-emitidos-via-srf/"
+                                    target="_blank">
+                                    <img [src]="image" style="width: 100%">
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

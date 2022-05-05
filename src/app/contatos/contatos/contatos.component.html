@@ -1,0 +1,43 @@
+<div class="main-content">
+  <div class="container-fluid">
+      <button mat-raised-button (click)="add()" class="btn btn-danger pull-left" *ngIf="hasPermission('novoContatoSRF')">Novo</button>
+      <div class="clearfix"></div>
+      <div class="card">
+          <div class="card-header card-header-danger">
+            <h3 class="card-title">Contatos</h3>
+            <p class="card-category">Módulo que cadastra um contato para um projeto</p>
+          </div>
+          <div class="card-body">
+              <div class="row">
+                    <div class="table-responsive">
+                      <mat-form-field>
+                        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar">
+                      </mat-form-field>
+                      <mat-table #table [dataSource]="dados" matSort> 
+                        <ng-container matColumnDef="{{ column.id }}" *ngFor="let column of columnNames">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header> {{column.value}} </mat-header-cell>
+                          <mat-cell *matCellDef="let element">
+                            <span *ngIf="column.id!='id'">{{element[column.id]}}</span>
+                            <table *ngIf="column.id=='id'">
+                              <td>
+                                <span class="btn btn-danger btn-link btn-sm btn-just-icon" style="color: darkblue" *ngIf= "hasPermission('editarContatoSRF')"
+                                (click)="edit(element.id)" title="Editar"><i class="material-icons">edit</i></span>
+                              </td>
+                              <td>
+                                <span class="btn btn-danger btn-link btn-sm btn-just-icon" *ngIf= "hasPermission('deletarContatoSRF')"
+                                (click)="remove(element.id)" title="Excluir"><i class="material-icons">delete</i></span>
+                              </td>
+                            </table>
+                          </mat-cell>
+                        </ng-container>
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                      </mat-table>
+                      <mat-paginator [length]="dados.data.length" #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                        showFirstLastButtons></mat-paginator>
+                    </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

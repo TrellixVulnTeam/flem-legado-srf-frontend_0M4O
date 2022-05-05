@@ -1,0 +1,71 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="card">
+        <div class="card-header card-header-danger">
+          <h4 class="card-title">Administrar Perfil</h4>
+          <p class="card-category">Módulo que aprova e reprova a alteração da dados do beneficiário</p>
+        </div>
+        <div class="card-body">
+          <form form [formGroup]="newForm">
+            <div class="row">
+              <div class="col-md-2">
+                <label for="filter">Matrícula:</label>
+                <input type="number" class="form-control" formControlName="matricula" id="matricula">
+              </div>
+              <div class="col-md-10">
+                <label for="situacao">Situação</label>
+                <mat-select style="height: 50px; padding: 2px; padding-left: 10px;" formControlName="situacao"
+                  placeholder="Selecione..." name="situacao" id="situacao">
+                  <mat-option *ngFor="let item of comboSituacao" [value]="item">
+                    {{item}}
+                  </mat-option>
+                </mat-select>
+              </div>
+            </div>
+          </form>
+          <app-projetos></app-projetos>
+          <div class="row">
+            <button mat-raised-button (click)="pesquisar()" class="btn btn-info pull-left">
+              <i class=" material-icons">search</i>Pesquisar</button>
+          </div>
+          <div [hidden]="!loading" align="center" style="width: 100%">
+            <h4>Buscando...</h4>
+            <mat-spinner [diameter]="40"></mat-spinner>
+          </div>
+          <div [hidden]="loading || !mostrarPesquisa" class="table-responsive">
+            <mat-form-field>
+              <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar">
+            </mat-form-field>
+            <mat-table #table [dataSource]="dados" #sort="matSort" matSort>
+              <ng-container matColumnDef="{{ column.id }}" *ngFor="let column of columnNames">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> {{column.value}} </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <span  matTooltip="{{contarPendenciasAbertas(element)}}">{{element.funcionario[column.id]}}</span>
+                  <span *ngIf="column.id=='id'">
+                    <table>
+                      <td *ngIf="hasPermission('visualizarPendenciaSRF')">
+                        <span  style="cursor: pointer;" (click)="abrirPendencia(element)"
+                          title="Abrir">
+                          <i class="material-icons">remove_red_eye</i>
+                        </span>
+                      </td>
+                    </table>
+                  </span>
+                </mat-cell>
+              </ng-container>
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+            <mat-paginator [length]="dados.data.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+              (page)="paginatorEvent($event)" [pageIndex]="pageIndex" showFirstLastButtons #paginator></mat-paginator>
+            <button mat-raised-button class="btn btn-success pull-left" (click)="exportAsXLSX()"
+              [hidden]="!mostrarPesquisa || loading">
+              <img src="/assets/img/icons8-microsoft-excel-48.png" style="width:23px" />Exportar XLSX</button> 
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

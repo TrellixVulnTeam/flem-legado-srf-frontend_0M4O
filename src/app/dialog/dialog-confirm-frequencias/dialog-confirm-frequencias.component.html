@@ -1,0 +1,46 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="card">
+        <div class="card-header card-header-blueflem" style="text-align:center">
+          <div class="card-title font-weight h4" align="center">
+            <table>
+              <tr>
+                <td><b>{{ tipoTitulo }} Frequência</b></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="card-body text-align-justify">
+          <div mat-dialog-content style="font-size: 17px;">
+            <div *ngIf="data.reprovar">
+              <label for="situacaoFuncionario">Tipo de Reprovação</label>
+              <mat-select style="height: 50px; padding: 2px; padding-left: 10px;" 
+                placeholder="Selecione..." name="tipo" id="tipo" [(ngModel)]="tipoReprovacao" >
+                <mat-option *ngFor="let item of tiposReprovacao$ | async" [value]="item.id">
+                  {{item.descricao}}
+                </mat-option>
+              </mat-select>
+              <span style="color:red;font-size:80%" *ngIf="!tipoReprovacao">Campo Obrigatório</span>
+            </div>
+            <div>
+              <label for="situacaoFuncionario">Observação</label>
+              <div>{{ tipoMotivo }}</div>
+              <textarea class="mdc-text-field__input" maxlength="250" rows="5" style="min-width: 100%"  [(ngModel)]="data.obj.observacao"   required></textarea>
+              <span style="color:red;font-size:80%" *ngIf="!data.obj.observacao">Campo Obrigatório</span>
+            </div>
+          </div>
+          <div mat-dialog-actions>
+            <button mat-raised-button class="btn btn-danger pull-left" (click)="reprovar()" *ngIf="data.reprovar">
+              <i class="material-icons">delete_forever</i>Reprovar</button>
+              <button mat-raised-button class="btn btn-success pull-left" (click)="reabrir()" *ngIf="!data.reprovar">
+                <i class="material-icons">lock_open</i>Reabrir</button>
+            <button mat-button (click)="onNoClick()" class="btn pull-right" style="background-color: gray;">
+              <i class="material-icons">close</i>Fechar</button>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

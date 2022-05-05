@@ -1,0 +1,135 @@
+<div class="row">
+    <div class="card">
+        <div class="card-header card-header-danger">
+            <h4 class="card-title">Buscar Funcionário</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-2">
+                    <label for="filter">Matrícula:</label>
+                    <input type="number" value="{{ funcionario.codigoDominio }}" (change)="buscar($event)" class="form-control" name="matricula"
+                        id="matricula" [disabled]="!userGestor || matricula" required>
+                    <span style="color:red" *ngIf="userGestor">Campo Obrigatório</span>
+                </div>
+                <div class="col-md-5">
+                    <label for="filter">Funcionário:</label>
+                    <input matInput style="color: black" value="{{ funcionario.nome }}" class="form-control" name="funcionario" id="funcionario"
+                        disabled>
+                </div>
+                <div [hidden]="!loading" class="col-md-5" align="right">
+                    <mat-spinner [diameter]="40"></mat-spinner>
+                </div>
+            </div>
+
+            <div [hidden]="loading || !exibirdados" class="row" *hasPermission="['visualizarPaiInfFunc']">
+                <br />
+                <div class="card-body">
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Informações Adicionais
+                                <i class="material-icons">arrow_drop_down</i>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="container-fluid" style="margin-bottom: 15px">
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <td>
+                                            <p>
+                                                <b>Nome:</b>
+                                                <br /> {{funcionario.nome}}
+                                            </p>
+                                        </td>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <td>
+                                            <p>
+                                                <b>Cargo:</b>
+                                                <br /> {{ funcionario.cargo ? funcionario.cargo.nome : "-"}}</p>
+                                        </td>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <td>
+                                            <p>
+                                                <b>Projeto:</b>
+                                                <br /> {{(funcionario.projeto) ? funcionario.projeto : "-"}}
+                                            </p>
+                                        </td>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <td>
+                                            <p>
+                                                <b>Local:</b>
+                                                <br /> {{(funcionario.cidade && funcionario.endereco.uf) ? funcionario.cidade +
+                                                " / " + funcionario.endereco.uf : "-"}}
+                                            </p>
+                                        </td>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <td>
+                                            <p>
+                                                <b>E-mail Principal:</b>
+                                                <br /> {{(funcionario.email) ? funcionario.email : "-"}}</p>
+                                        </td>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <td>
+                                            <p>
+                                                <b>Status:</b>
+                                                <br /> {{(funcionario.situacao) ? funcionario.situacao : "-"}}</p>
+                                        </td>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <td>
+                                            <p>
+                                                <b>Data de Admissão:</b>
+                                                <br /> {{(funcionario.dataAdmissao) ? funcionario.dataAdmissao : "-"}}</p>
+                                        </td>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <td>
+                                            <p>
+                                                <b>Data de Demissão:</b>
+                                                <br /> {{(funcionario.dataDemissao) ? funcionario.dataDemissao : "-"}}</p>
+                                        </td>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <td>
+                                            <p>
+                                                <b>Carga Horária Diária:</b>
+                                                <br /> {{(funcionario.jornadaDiariaFormatada) ? funcionario.jornadaDiariaFormatada + ' horas' : "-"}}
+                                            </p>
+                                        </td>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <td>
+                                            <p>
+                                                <b>Carga Horária Mensal:</b>
+                                                <br /> {{(funcionario.horasMes) ? funcionario.horasMes + ' horas' : "-"}}
+                                            </p>
+                                        </td>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <td>
+                                            <p>
+                                                <b>Banco de Horas:</b>
+                                                <br /> {{ (funcionario.totalBancoHorasFormatado) ? funcionario.totalBancoHorasFormatado
+                                                : "-"}}</p>
+                                        </td>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                    </mat-expansion-panel>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

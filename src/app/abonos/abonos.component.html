@@ -1,0 +1,221 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="card">
+        <div class="card-header card-header-danger">
+          <h4 class="card-title">Administrar Justificativas Ausência</h4>
+          <p class="card-category">Módulo que gerencia as justificativas Ausência</p>
+        </div>
+        <div class="card-body">
+          <form form [formGroup]="newForm">
+            <div class="row">
+              <div class="col-md-2">
+                <label for="filter">Matrícula:</label>
+                <input type="number" class="form-control" formControlName="matricula" id="matricula">
+              </div>
+              <div class="col-md-2">
+                <label for="filter">Mês Ano:</label>
+                <input type="text" class="form-control" formControlName="competencia" id="competencia"
+                  [textMask]="{mask: mask}">
+                <mat-error *ngIf="!newForm.controls.competencia.valid">Campo Obrigatório</mat-error>
+              </div>
+              <div class="col-md-4">
+                <label for="descricao">Tipo de Justificativas Ausência:</label>
+                <mat-select style="height: 50px; padding: 5px; padding-left: 15px;" placeholder="Selecione..."
+                  name="status" id="status" formControlName="tipo">
+                  <mat-option *ngFor="let item of tipos" [value]="item.id">
+                    {{item.value}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="!newForm.controls.tipo.valid">Campo Obrigatório</mat-error>
+              </div>
+              <div class="col-md-4">
+                <label for="descricao">Situação:</label>
+                <mat-select style="height: 50px; padding: 5px; padding-left: 15px;" placeholder="Selecione..."
+                  name="status" id="status" formControlName="status">
+                  <mat-option *ngFor="let item of situacoes" [value]="item.id">
+                    {{item.value}}
+                  </mat-option>
+                </mat-select>
+              </div>
+            </div>
+          </form>
+          <br />
+          <div class="row">
+            <div class="col-md-12">
+              <mat-form-field class="filter-full-width">
+                <input type="text" placeholder="Projetos" aria-label="Number" matInput [formControl]="myControlProjetos"
+                  [matAutocomplete]="at">
+                <mat-autocomplete #at="matAutocomplete">
+                  <mat-option *ngFor="let item of filteredProjects | async" [value]="item.nome"
+                    (onSelectionChange)="onSelectionChangedMunicipio(item.codigoDominio)">
+                    {{item.nome}}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row" [hidden]="hideCombos">
+            <div class="col-md-6">
+              <mat-form-field class="example-full-width">
+                <input type="text" [(ngModel)]="ngMunicipio" placeholder="Municipio" aria-label="Number" matInput
+                  [formControl]="myControlMunicipio" [matAutocomplete]="aut">
+                <mat-autocomplete #aut="matAutocomplete">
+                  <mat-option *ngFor="let option of filteredMunicipios | async" [value]="option.nome"
+                    (onSelectionChange)="showDemandanteMunicipio(option.id)">
+                    {{option.nome}}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field class="example-full-width">
+                <input type="text" [(ngModel)]="ngDemandante" placeholder="Demandante" aria-label="Number" matInput
+                  [formControl]="myControlDemandante" [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option *ngFor="let option of filteredDemandantes | async" [value]="option.nome"
+                    (onSelectionChange)="onSelectionChangedDemandante(option.id)">
+                    {{option.nome}}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <button mat-raised-button (click)="pesquisar()" class="btn btn-info pull-left">
+              <i class=" material-icons">search</i>Pesquisar</button>
+            <!-- <button mat-raised-button (click)="limpar()" class="btn pull-right">
+                <i class=" material-icons">brush</i>Limpar</button> -->
+          </div>
+          <div [hidden]="!loading" align="center" style="width: 100%">
+            <h4>Buscando...</h4>
+            <mat-spinner [diameter]="40"></mat-spinner>
+          </div>
+          <!-- <div [hidden]="loading || !mostrarPesquisa" class="table-responsive"> -->
+          <br />
+          <br />
+          <div class="row" style="overflow-y: auto">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <tbody *ngFor="let groupOne of abonos | groupBy:'nome'">
+                  <tr class="card-header card-header-danger">
+                    <td colspan="5">{{groupOne?.key}}</td>
+                  </tr>
+                  <tr *ngFor="let itemOne of groupOne.value">
+                    <mat-expansion-panel>
+                      <mat-expansion-panel-header>
+                        Justificativas
+                      </mat-expansion-panel-header>
+                      <table class="table table-hover">
+                        <thead class="text-primary">
+                          <th>Data</th>
+                          <th>Tipo</th>
+                          <th>Status</th>
+                          <th>Descrição</th>
+                          <th>Ação</th>
+                        </thead>
+                        <tbody *ngFor="let groupTwo of itemOne.abonos | groupBy:'dataDia'">
+                          <tr class="card-header" style="background: #D5D8DC ;">
+                            <td colspan="5">
+                              <mat-checkbox  (change)="onCheckboxChange(groupTwo,$event)"></mat-checkbox>
+                              &nbsp;&nbsp;{{groupTwo?.key}}
+                            </td>
+                          </tr>
+                          <tr *ngFor="let itemTwo of groupTwo.value">
+                            <td
+                              [ngStyle]="{'color':itemTwo.status === 'Aprovado' ? 'green' : itemTwo.status === 'Reprovado' ? 'red' :  itemTwo.status === 'Reaberto' ? 'blue' : ''}">
+                              {{itemTwo.horaInicio}} - {{itemTwo.horaFim}}
+                            </td>
+                            <td
+                              [ngStyle]="{'color':itemTwo.status === 'Aprovado' ? 'green' : itemTwo.status === 'Reprovado' ? 'red' : itemTwo.status === 'Reaberto' ? 'blue' : ''}">
+                              {{itemTwo.tipo}}
+                            </td>
+                            <td
+                              [ngStyle]="{'color':itemTwo.status === 'Aprovado' ? 'green' : itemTwo.status === 'Reprovado' ? 'red' : itemTwo.status === 'Reaberto' ? 'blue' : ''}">
+                              {{itemTwo.status}}
+                            </td>
+                            <td
+                              [ngStyle]="{'color':itemTwo.status === 'Aprovado' ? 'green' : itemTwo.status === 'Reprovado' ? 'red' : itemTwo.status === 'Reaberto' ? 'blue' : ''}">
+                              {{itemTwo.descricao}}
+                            </td>
+                            <td>
+                              <span *ngIf="(itemTwo.status ==='Lançado' 
+                                     || itemTwo.status ==='Reaberto')
+                                      && ( hasPermission('validarRegFreq') || hasPermission('outrasfaltasSRF'))
+                                      && !hasPermission('atestadoSRF')
+                                      && (itemTwo.tipo =='Outras faltas' ||  itemTwo.tipo =='Falta Legal')"
+                                style="cursor: pointer;color: green;" (click)="openDialogAprovar(itemTwo)"
+                                title="Aprovar">
+                                <i class="material-icons">check</i>
+                              </span>
+                              <span *ngIf="(itemTwo.status ==='Lançado' || itemTwo.status ==='Reaberto') 
+                                &&  hasPermission('atestadoSRF')
+                                &&  !hasPermission('validarRegFreq') 
+                                && !hasPermission('outrasfaltasSRF')
+                                && itemTwo.tipo =='Falta Médica'" style="cursor: pointer;color: green;"
+                                (click)="openDialogAprovar(itemTwo)" title="Aprovar">
+                                <i class="material-icons">check</i>
+                              </span>
+                              <span *ngIf="(itemTwo.status ==='Lançado' 
+                              || itemTwo.status ==='Reaberto')
+                               && ( hasPermission('validarRegFreq') || hasPermission('outrasfaltasSRF'))
+                               && !hasPermission('atestadoSRF')
+                               && (itemTwo.tipo =='Outras faltas' || itemTwo.tipo =='Falta Legal')"
+                                style="cursor: pointer;color: red;" title="Reprovar"
+                                (click)="openDialogReprovar(itemTwo)">
+                                <i class="material-icons">not_interested</i>
+                              </span>
+                              <span *ngIf="(itemTwo.status ==='Lançado' || itemTwo.status ==='Reaberto') 
+                              &&  hasPermission('atestadoSRF')
+                              &&  !hasPermission('validarRegFreq') 
+                              && !hasPermission('outrasfaltasSRF')
+                              && itemTwo.tipo =='Falta Médica'" style="cursor: pointer;color: red;" title="Reprovar"
+                                (click)="openDialogReprovar(itemTwo)">
+                                <i class="material-icons">not_interested</i>
+                              </span>
+                              <span
+                                *ngIf="(itemTwo.status ==='Aprovado' || itemTwo.status ==='Reprovado') && hasPermission('reabrirAbonoSRF') "
+                                style="cursor: pointer;color: blue;" (click)="openDialogReabrir(itemTwo)"
+                                title="Reabrir">
+                                <i class="material-icons">lock_open</i>
+                              </span>
+                              <span
+                                *ngIf="(itemTwo.status ==='Lançado' || itemTwo.status ==='Reaberto')  && hasPermission('uploadAbonoSRF')"
+                                style="cursor: pointer;color: darkblue;" (click)="openDialogEnviarArquivo(itemTwo.id)"
+                                title="Enviar">
+                                <i class="material-icons">vertical_align_top</i>
+                              </span>
+                              <span *ngIf="itemTwo.filePath" style="cursor: pointer;"
+                                (click)="download(itemTwo.atestadoId)" title="Baixar">
+                                <i class="material-icons">cloud_download</i>
+                              </span>
+                              <span style="cursor: pointer;" (click)="openDialogHistorico(itemTwo.id)"
+                                title="Histórico">
+                                <i class="material-icons">event_note</i>
+                              </span>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <mat-action-row>
+                        <button mat-raised-button (click)="aprovarEmLote()" class="btn btn-success  pull-left">
+                          <i class=" material-icons">done</i>Validar Em Lote
+                        </button>
+                        <button mat-raised-button (click)="openDialogReprovarEmLote()" class="btn btn-danger pull-left">
+                          <i class=" material-icons">delete_forever</i>Reprovar Em Lote
+                        </button>
+                        <button mat-raised-button (click)="reabrirDias()" class="btn btn-info pull-left">
+                          <i class=" material-icons">lock_open</i>Reabrir Em Lote
+                        </button>
+                      </mat-action-row>
+                    </mat-expansion-panel>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+# file environment
+# /src/environments/**
+
+# compiled output
+/dist/*
+/tmp/*
+/out-tsc/*
+/.vscode/*

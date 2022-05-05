@@ -1,0 +1,28 @@
+<div class="main-content" align="center">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="card">
+                <div class="card-header card-header-blueflem">
+                    <div class="card-title font-weight h4">
+                        <table>
+                            <tr>
+                                <td><b>Confirmação de E-mail!</b></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-body text-align-justify">
+                    <div style="width: 100%; border-spacing: 10px; font-weight: bold; text-align: justify">
+                        {{mensagemConfirmacao}}
+                    </div>
+                    <div style="width: 100%; text-align: right">
+                        <button mat-raised-button (click)="onNoClick()" class="btn" style="background-color: gray;">
+                            <i class="material-icons">
+                                done_outline
+                            </i> <b>Estou Ciente</b></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

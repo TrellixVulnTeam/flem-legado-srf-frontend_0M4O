@@ -1,0 +1,54 @@
+<div class="main-content">
+  <div class="container-fluid">
+      <button mat-raised-button (click)="add()" class="btn btn-danger pull-left">Novo</button>
+      <div class="clearfix"></div>
+      <div class="card">
+          <div class="card-header card-header-danger">
+            <h3 class="card-title">Justificativas</h3>
+            <p class="card-category"> Todas as Justificativas Cadastradas </p>
+          </div>
+          <div class="card-body">
+              <div class="row">
+                    <div class="table-responsive">
+                      <table class="table table-hover">
+                          <thead class="text-primary">                       
+                              <th>Descrição</th>
+                              <th>Abonado?</th>                             
+                              <th>Anexo?</th>
+                              <th>Envia Email?</th>
+                              <th>E-mail</th>
+                              <th>Prazo Em Horas</th>
+                              <th>Dias Abonados</th>
+                              <th>Ação</th>
+                          </thead>
+                          <tbody  *ngFor="let group of justificativas | groupBy:'descTipoJustificativa'">
+                              <tr class="card-header card-header-danger">
+                                  <td colspan="9">{{group?.key}}</td>
+                              </tr>
+                              <tr *ngFor="let item of group.value">
+                                  <td>{{ item.descricao }}</td>
+                                  <td>{{ item.abono | boolean: ['Sim','Não'] }}</td>
+                                  <td>{{ item?.isAnexo | boolean: ['Sim','Não'] }}</td>
+                                  <td>{{ item.enviaEmail | boolean: ['Sim','Não'] }}</td>    
+                                  <td><span  matTooltip="{{getListaEmail(item.contatos)}}" *ngIf="item.contatos.length > 0"><i class="material-icons">email</i></span></td>                               
+                                  <td>{{ item.prazoEmHoras }}
+                                      <span *ngIf="item.prazoEmHoras"> horas</span>
+                                  </td>
+                                  <td>{{ item.dias }}</td>    
+                                  <td>
+                                    <button mat-raised-button type="button" title="Editar" (click)="edit(item.id)" class="btn btn-primary btn-link btn-sm btn-just-icon">
+                                      <i class="material-icons">edit</i>
+                                    </button>
+                                    <button mat-raised-button type="button" title="Excluir" (click)="delete(item.id)" class="btn btn-danger btn-link btn-sm btn-just-icon">
+                                        <i class="material-icons">delete</i>
+                                    </button>
+                                  </td>
+                              </tr>
+                          </tbody>
+                      </table>
+                    </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

@@ -1,0 +1,87 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <app-funcionario></app-funcionario>
+        <div class="card">
+            <div class="card-header card-header-danger">
+                <h3 class="card-title">Administrar Frequência</h3>
+                <p class="card-category">Administração de frequência do funcionário</p>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="filter">Mês da Frequência:</label>
+                        <div class="card card-stats">
+                            <mat-select style="height: 50px; padding: 5px; padding-left: 15px;"
+                                placeholder="Selecione..." (change)="marcacoes($event)" [(ngModel)]="selectedValue"
+                                name="projetos">
+                                <mat-option *ngFor="let item of frequenciaList" [value]="item">
+                                    {{item.mesAnoFrequencia}}
+                                </mat-option>
+                            </mat-select>
+                        </div>
+
+                    </div>
+                </div>
+                <div [hidden]="!loading" class="container-fluid col-lg-6 col-md-12" align="center">
+                    <h5>Buscando...</h5>
+                    <mat-spinner [diameter]="80"></mat-spinner>
+                </div>
+                <div [hidden]="loading || !enableField" *ngIf="!isVoltar">
+                    <app-bt-acao (updateGrid)="atualizarGrid($event)" [frequencia]="frequencia"
+                        [enableAnexo]="enableAnexo" [id]="idFrequencia" [isFolhaValidada]="isFolhaValidada"
+                        [isDisponibilizar]="isDisponibilizar" [isCodProjetoSaeb]="isCodProjetoSaeb" ></app-bt-acao>
+
+                    <div class="table-responsive">
+                        <mat-card>
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <span class="text-primary">Informações</span>
+                                </mat-card-title>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <span *ngIf="totalHorasTrabalhadas"> <b>Total de Horas Trabalhadas no mês:</b>
+                                    {{ totalHorasTrabalhadas | dateHelper: 'time' }} </span>
+                            </mat-card-content>
+                        </mat-card>
+                        <app-marcacoes [frequencia]="frequencia" [maskTime]="maskTime"
+                            [isFolhaValidada]="isFolhaValidada" [idFrequencia]="idFrequencia" ></app-marcacoes>
+                        <button mat-raised-button class="btn btn-danger pull-left" (click)="openDialogAprovarLote()"
+                            *ngIf="enableValidarLote()">
+                            <i class="material-icons">done</i> Aprovar Em Lote
+                        </button>
+                        <button mat-raised-button class="btn btn-info pull-right" (click)="openDialogObservacaoFrequencia()" *ngIf="enableNaoAssinatura()">
+                            <i class="material-icons">textsms</i>Observação da não Assinatura Resp.
+                        </button>
+                    </div>
+                </div>
+                <div *ngIf="isVoltar">
+                    <app-bt-acao (updateGrid)="atualizarGrid($event)" [frequencia]="frequencia"
+                        [enableAnexo]="enableAnexo" [id]="idFrequencia" [isFolhaValidada]="isFolhaValidada"
+                        [isDisponibilizar]="isDisponibilizar" [isGeracaoAutomatica]="isGeracaoAutomatica"></app-bt-acao>
+
+                    <div class="table-responsive">
+                        <mat-card>
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <span class="text-primary">Informações</span>
+                                </mat-card-title>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <span *ngIf="totalHorasTrabalhadas"> <b>Total de Horas Trabalhadas no mês:</b>
+                                    {{ totalHorasTrabalhadas | dateHelper: 'time' }} </span>
+                            </mat-card-content>
+                        </mat-card>
+                        <app-marcacoes [frequencia]="frequencia" [maskTime]="maskTime" [isFolhaValidada]="isFolhaValidada" [idFrequencia]="idFrequencia" ></app-marcacoes>
+                        <button mat-raised-button class="btn btn-danger pull-left" (click)="openDialogAprovarLote()" *ngIf="enableValidarLote()">
+                            <i class="material-icons">done</i> Aprovar Em Lote
+                        </button>
+                        <button mat-raised-button class="btn btn-info pull-right" (click)="openDialogObservacaoFrequencia()" *ngIf="enableNaoAssinatura()">
+                            <i class="material-icons">done</i>Observação da não Assinatura Resp.
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

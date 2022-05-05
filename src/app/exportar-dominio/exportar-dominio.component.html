@@ -1,0 +1,173 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="card">
+        <div class="card-header card-header-danger">
+          <h4 class="card-title">Exportar Para Domínio</h4>
+          <p class="card-category">Gerar arquivos com dados para importação na domínio.</p>
+        </div>
+        <div class="card-body">
+          <div [hidden]="!loadingexportacoes" class="container-fluid col-lg-6 col-md-12" align="center">
+            <h5>Processando...</h5>
+            <mat-spinner [diameter]="80"></mat-spinner>
+          </div>
+          <div [hidden]="loadingexportacoes">
+            <form form [formGroup]="form">
+              <div class="row">
+                <div class="col-md-6">
+                  <label for="filter">Dados Para Exportação:</label>
+                  <mat-select class="form-control" formControlName="tipoexportacao" placeholder="Selecione..."
+                    name="tipoexportacao">
+                    <mat-option *ngFor="let item of tipoexportacao" [value]="item.valor">
+                      {{item.descricao}}
+                    </mat-option>
+                  </mat-select>
+                </div>
+                <div class="col-md-3">
+                  <label for="filter">Mês Ano Referência de Dados:</label>
+                  <input type="text" class="form-control" formControlName="mesanodados" id="mesanodados"
+                    [textMask]="{mask: mask}">
+                </div>
+                <div class="col-md-3">
+                  <label for="filter">Mês Ano Desconto em Folha:</label>
+                  <input type="text" class="form-control" formControlName="mesanofolha" id="mesanofolha"
+                    [textMask]="{mask: mask}">
+                </div>
+              </div>
+              <br />
+              <div class="row">
+                <div class="col-md-12">
+                  <label for="filter">Projetos:</label>
+                  <mat-form-field class="filter-full-width">
+                    <input type="text" placeholder="Buscar" aria-label="Number" matInput [formControl]="myControl">
+                  </mat-form-field>
+                  <input type="checkbox" value="0" name="tudo" (change)="marcarDesmarcar()" [checked]=checked />
+                  <b>Todos os Projetos</b>
+                  <div class="flex layout-padding" style="overflow-y: scroll; max-height:200px; padding-left: 25px">
+                    <mat-option *ngFor="let item of filteredProjects | async" [value]="item.nome">
+                      <input type="checkbox" value="{{item.codigoDominio}}" name="tudo"
+                        (change)="onCheckboxChange(item,$event)" [checked]="(checked || projetosSelecionados(item))" />
+                      {{item.nome}}
+                    </mat-option>
+                  </div>
+                </div>
+              </div>
+              <button mat-raised-button class="btn btn-success pull-left" (click)="gerarExportacao()">
+                <i class="material-icons">unarchive</i>
+                &nbsp;Gerar Exportação
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="card">
+        <div class="card-header card-header-danger">
+          <h4 class="card-title">Exportações </h4>
+          <p class="card-category">Lista de expotações e detalhamentos gerados.</p>
+          <span style="cursor:pointer;margin-left: 98%;margin-top: -1%;" title="Histórico de Alterações" (click)="openDialogHistorico()">
+            <i class="material-icons">event_note</i>
+          </span>
+        </div>
+        <div [hidden]="!loadingexportacoes" class="container-fluid col-lg-6 col-md-12" align="center">
+          <h5>Processando...</h5>
+          <mat-spinner [diameter]="80"></mat-spinner>
+        </div>
+        <div [hidden]="loadingexportacoes">
+          <div class="card-body table-responsive">
+            <mat-form-field>
+              <input matInput (keyup)="applyFilterExportacaoDominio($event.target.value)" placeholder="Filtrar">
+            </mat-form-field>
+            <mat-table #table [dataSource]="dataSourceExportacao" matSort>
+              <ng-container matColumnDef="{{ column.id }}" *ngFor="let column of exportacaoColumnNames">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <div align='center'>{{column.value}}</div>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+
+                  <div
+                    [hidden]="(column.id == 'fileNameExportacao' || column.id == 'fileNameDetalhamento' || column.id == 'regularizar' || column.id == 'dsr' || column.id == 'delete')"
+                    align='center'>
+                    {{(element[column.id]) ? element[column.id] : "-"}}
+                  </div>
+
+                  <div [hidden]="(column.id != 'fileNameExportacao')" align='center'>
+                    <span style="cursor: pointer;" [hidden]="!(element['fileNameExportacao'])"
+                      (click)="DownloadFileExportacao(element['id'], element['fileNameExportacao'])"
+                      title="Baixar Exportação">
+                      <i class="material-icons">cloud_download</i>
+                    </span>
+                  </div>
+
+                  <div [hidden]="(column.id != 'fileNameDetalhamento')" align='center'>
+                    <span style="cursor: pointer;" [hidden]="!(element['fileNameDetalhamento'])"
+                      (click)="DownloadFileDetalhamento(element['id'], element['fileNameDetalhamento'])"
+                      title="Baixar Exportação">
+                      <i class="material-icons">cloud_download</i>
+                    </span>
+                  </div>
+
+                  <div [hidden]="(column.id != 'regularizar')" align='center'>
+                    <span style="cursor: pointer;"
+                      [hidden]="(element['regularizacao'] || element['tipoexportacao'] != 'EXPORTAR_FALTAS')"
+                      (click)="gerarRegularizacaoFaltas(element['id'])" title="Gerar Regularização de Faltas">
+                      <i class="material-icons">360</i>
+                    </span>
+                  </div>
+
+                  <div [hidden]="(column.id != 'regularizar')" align='center'>
+                    <span style="cursor: pointer;"
+                      [hidden]="(element['regularizacao'] || element['tipoexportacao'] != 'EXPORTAR_FALTAS')"
+                      (click)="openDialogCompetencia(element['id'])" title="Gerar Pagamento de Faltas Regularizadas">
+                      <i class="material-icons" style="color:green">360</i>
+                    </span>
+                  </div>
+
+                  <div [hidden]="(column.id != 'dsr')" align='center'>
+                    <span style="cursor: pointer;"
+                      [hidden]="(element['regularizacao'] || element['tipoexportacao'] != 'EXPORTAR_FALTAS')"
+                      (click)="gerarDsrFaltas(element['id'])" title="Gerar DSR de Faltas">
+                      <i class="material-icons">remove_circle_outline</i>
+                    </span>
+                  </div>
+
+                  <div [hidden]="(column.id != 'dsr')" align='center'>
+                    <span style="cursor: pointer;"
+                      [hidden]="(element['regularizacao'] || element['tipoexportacao'] != 'EXPORTAR_FALTAS_REGULARIZACAO')"
+                      (click)="gerarRegularizacaoDsrFaltas(element['id'])" title="Gerar Regularização de DSR de Faltas">
+                      <i class="material-icons">remove_circle</i>
+                    </span>
+                  </div>
+
+                  <div [hidden]="(column.id != 'dsr')" align='center'>
+                    <span style="cursor: pointer;"
+                      [hidden]="(!element['regularizacao'] || element['tipoexportacao'] != 'EXPORTAR_FALTAS_REGULARIZACAO_PAGAMENTO')"
+                      (click)="gerarPagamentoRegularizacaoDsrFaltas(element['id'])"
+                      title="Gerar Pagamento de DSR de Faltas Regularizadas.">
+                      <i class="material-icons" style="color:green">remove_circle</i>
+                    </span>
+                  </div>
+
+                  <div [hidden]="(column.id != 'delete')" align='center'>
+                    <button mat-raised-button type="button" title="Excluir" (click)="delete(element['id'])"
+                      class="btn btn-danger btn-link btn-sm btn-just-icon">
+                      <i class="material-icons">delete</i>
+                    </button>
+                  </div>
+
+                </mat-cell>
+              </ng-container>
+              <mat-header-row *matHeaderRowDef="exportacaoDisplayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: exportacaoDisplayedColumns;"></mat-row>
+            </mat-table>
+            <mat-paginator [hidden]='dataSourceExportacao.data.length < 6' #paginator
+              [length]="dataSourceExportacao.data.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+              showFirstLastButtons>
+            </mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

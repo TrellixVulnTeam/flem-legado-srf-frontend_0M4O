@@ -1,0 +1,62 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <app-funcionario></app-funcionario>
+    <div class="row">
+      <div class="card">
+        <div class="card-header card-header-danger">
+          <h4 class="card-title">Ajuste Banco de Horas</h4>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="newForm">
+            <div class="row">
+              <div class="col-md-6">
+                <label for="justificativas">Tipo de Ajuste de Hora</label>
+                <mat-select class="form-control" style="height: 50px; padding: 5px; padding-left: 15px;" formControlName="tipo" placeholder="Selecione..."
+                  name="tpAjustes" required>
+                  <mat-option *ngFor="let item of tpAjustes" [value]="item">
+                    {{item}}
+                  </mat-option>
+                </mat-select>
+                <span style="color:red">Campo Obrigatório</span>
+              </div>
+              <div class="col-md-6">
+                <label for="filter">Mês da Frequência:</label>
+                <mat-select style="height: 50px; padding: 5px; padding-left: 15px;" placeholder="Selecione..." 
+                  name="projetos" formControlName="frequencia" required>
+                  <mat-option *ngFor="let item of frequenciaList$ | async" [value]="item">
+                    {{item.mesAnoFrequencia}}
+                  </mat-option>
+                </mat-select>
+                <span style="color:red">Campo Obrigatório</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-2">
+                <label for="filter">Horas</label>
+                <input matInput formControlName="hora" [textMask]="{mask: maskTime}" class="form-control" name="hora" id="hora" required>
+                <span style="color:red">Campo Obrigatório</span>
+              </div>
+              <div class="col-md-6">
+                  <label for="filter">Observação</label>
+                  <textarea matInput formControlName="observacao" class="form-control" name="observacao" id="observacao"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                      <div class="col-md-4">
+                <br/> Horas Positivas
+                <input type="radio" formControlName="check" value="P"> Horas Negativas
+                <input type="radio" formControlName="check" value="N">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-9">
+                  <button mat-raised-button (click)="salvar()" class="btn btn-info pull-left">
+                      <i class="material-icons">done</i>Salvar</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

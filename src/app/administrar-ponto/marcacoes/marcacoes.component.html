@@ -1,0 +1,129 @@
+<div class="table-responsive">
+    <table class="table" id="marcacoes">
+        <thead class="text-primary">
+
+            <th>Status</th>
+            <th>Entrada</th>
+            <th>Saida</th>
+            <th *ngIf="!isFolhaValidada">Validar</th>
+            <th>Total Horas</th>
+            <th>Anexos</th>
+            <th>Justificativa</th>
+        </thead>
+        <tbody *ngFor="let f of frequencia">
+            <tr class="card-header card-header-danger">
+                <td colspan="7">
+                    {{f.dataDia | dateHelper: 'dayOfWeek'}} - {{f.dataDia }}
+                    <span class="pull-right">
+                        Horas Trabalhadas {{ f.horasTrabalhadas | dateHelper: 'time'}}
+                        <!-- | Horas Abonadas {{ f.saldoAbono | dateHelper: 'time'}} -->
+                    </span>
+                </td>
+                <td>
+                    <span (click)="openDialogHistorico(f)" style="cursor:pointer;" *ngIf="f.id">
+                        <i class="material-icons">event_note</i>
+                    </span>
+                </td>
+            </tr>
+            <tr *ngIf="!f.abonos || f.abonos.length == 0 && !f.marcacoes">
+                <td>{{f.observacao}}</td>
+            </tr>
+            <tr *ngFor="let a of f.abonos">
+                <td>{{a.descTipoMovimento}}</td>
+                <td>
+                    <input [(ngModel)]="a.horaInicio" style="text-align: center;width: 60px;"
+                        [textMask]="{mask: maskTime}" disabled>
+                </td>
+                <td>
+                    <input [(ngModel)]="a.horaFim" style="text-align: center;width: 60px;" [textMask]="{mask: maskTime}"
+                        disabled>
+                </td>
+
+                <td>
+                    <!-- Logica de aprovação falta legal -->
+                    <span *ngIf="(!f.folhaValidada && !a.validado) 
+                                && (hasPermission('validarRegFreq') 
+                                && a.descJustificativa!='ATESTADO MÉDICO' 
+                                && a.descJustificativa!='OUTRAS FALTAS'
+                                && a.descJustificativa!='VIAGEM A SERVIÇO')" title="Aprovar ou Reprovar"
+                        (click)="openDialogAprovarAbono(a)" style="cursor:pointer;">
+                        <i class="material-icons">done</i>
+                    </span>
+                    <!-- Logica de aprovação dos atestado medicos -->
+                    <span *ngIf="hasPermission('atestadoSRF') 
+                                 && !a.validado 
+                                 && a.descJustificativa=='ATESTADO MÉDICO'
+                                 && a.descJustificativa!='OUTRAS FALTAS' 
+                                 && a.descJustificativa!='VIAGEM A SERVIÇO'" title="Aprovar ou Reprovar"
+                        (click)="openDialogAprovarAtestadoOrOutrasFaltas(a)" style="cursor:pointer;">
+                        <i class="material-icons">done</i>
+                    </span>
+                    <!-- Logica de aprovação dos outras faltas e viagem-->
+                    <span *ngIf="hasPermission('outrasfaltasSRF')  
+                                 && !a.validado
+                                 && a.descJustificativa!='ATESTADO MÉDICO'
+                                 && ( a.descJustificativa=='OUTRAS FALTAS'
+                                 || a.descJustificativa=='VIAGEM A SERVIÇO' )" title="Aprovar ou Reprovar"
+                        (click)="openDialogAprovarAtestadoOrOutrasFaltas(a)" style="cursor:pointer;">
+                        <i class="material-icons">done</i>
+                    </span>
+                </td>
+                <td>{{a.horasAbonadas}}</td>
+                <td>
+                    <span *ngIf="a.sizeFile" (click)="downloadAnexoAbono(a.idAtestado)" style="cursor: pointer;">
+                        <i class="material-icons">archive</i>
+                    </span>
+                </td>
+                <td>{{a.descJustificativa}}</td>
+            </tr>
+            <tr *ngFor="let m of f.marcacoes">
+                <td>
+                    <span>{{getDescTipoMovimento(m.hrEntrada,m.hrSaida)}}</span>
+                </td>
+                <td *ngIf="m.hrEntrada">
+                    <input [(ngModel)]="m.hrEntrada.horaMarcacao"
+                        (change)="changeSalvarHorarios(m,m.hrEntrada,f.dataDia)" style="text-align: center;width: 60px;"
+                        name="base" id="entrada" [textMask]="{mask: maskTime}"
+                        disabled="{{ isEnableInput(m.hrEntrada.tipoMvto,f.folhaValidada) }}" />
+
+                    <span (click)="openDialogConfirm(m.hrEntrada.id)" style="cursor:pointer; margin-top: 50px;"
+                        *ngIf="isEnableExcluir(m.hrEntrada.tipoMvto,f.folhaValidada)">
+                        <i class="material-icons">delete_forever</i>
+                    </span>
+                    <span title="Reprovar" *ngIf="hasPermission('validarRegFreq') && m.hrEntrada && !f.folhaValidada"
+                        (click)="openDialogReprovar(m.hrEntrada, f.dataDia )" style="cursor:pointer;">
+                        <i class="material-icons" *ngIf="m.hrEntrada.status != 'REPROVADO' ">not_interested</i>
+                    </span>
+                </td>
+                <td *ngIf="m.hrSaida">
+                    <input matInput [(ngModel)]="m.hrSaida.horaMarcacao"
+                        (change)="changeSalvarHorarios(m,m.hrSaida,f.dataDia)" style="text-align: center;width: 60px;"
+                        name="base" id="saida" [textMask]="{mask: maskTime}"
+                        disabled="{{ isEnableInput(m.hrSaida.tipoMvto,f.folhaValidada) }}" />
+                    <span (click)="openDialogConfirm(m.hrSaida.id)" style="cursor:pointer;"
+                        *ngIf="isEnableExcluir(m.hrSaida.tipoMvto,f.folhaValidada)">
+                        <i class="material-icons">delete_forever</i>
+                    </span>
+                    <span title="Reprovar" *ngIf="hasPermission('validarRegFreq') && m.hrSaida && !f.folhaValidada"
+                        (click)="openDialogReprovar(m.hrSaida, f.dataDia )" style="cursor:pointer;">
+                        <i class="material-icons" *ngIf="m.hrEntrada.status != 'REPROVADO' ">not_interested</i>
+                    </span>
+                </td>
+                <td *ngIf="!f.folhaValidada">
+                    <span title="Aprovar ou Reprovar" *ngIf="hasPermission('validarRegFreq') && m.hrEntrada"
+                        (click)="openDialogAprovar(m,f.dataDia)" style="cursor:pointer;">
+                        <i class="material-icons">done</i>
+                    </span>
+                </td>
+                <td>
+                    <span *ngIf="m.hrEntrada && m.hrSaida">{{m.hrTrabalhadas}}</span>
+                </td>
+                <td>
+
+                </td>
+                <td>
+                    <span *ngIf="m.hrEntrada">{{ m.justificativa }}</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>

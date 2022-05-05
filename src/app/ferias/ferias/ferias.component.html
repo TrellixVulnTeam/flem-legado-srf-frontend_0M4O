@@ -1,0 +1,84 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <app-funcionario></app-funcionario>
+    <div class="row">
+      <div class="card">
+        <div class="card-header card-header-danger">
+          <h4 class="card-title">Férias</h4>
+          <p class="card-category">Módulo de Férias</p>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive" *ngIf="pesquisaAtiva">
+            <mat-form-field>
+              <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar">
+            </mat-form-field> 
+            <mat-table #table [dataSource]="dados" matSort>
+              <ng-container matColumnDef="{{ column.id }}" *ngFor="let column of columnNames">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> {{column.value}} </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <span *ngIf="(!element.situacao && column.id!='acao') 
+                              &&  element.situacao !='Aprovado' 
+                              &&  element.situacao !='Documentação pendente'">{{element[column.id]}}</span>
+                  <span *ngIf="( element.situacao  && column.id!='acao') 
+                              && ( element.situacao =='Aprovado' 
+                              || element.situacao =='Documentação pendente')"
+                  [ngStyle]="{'color':element.situacao === 'Aprovado' ? 'green' : 'indianred'}"  matTooltip="{{element.observacao}}">{{element[column.id]}}</span>                              
+                  <span *ngIf="column.id=='acao'">
+                    <table [hidden]="element.loading">
+                      <td *ngIf="hasPermission('downloadAvisoFeriasSRF')">
+                        <span *ngIf="element.avisoDisponivel=='S' || element.aviso || hasPermission('srf_userAdm')" style="cursor: pointer;"
+                          (click)="gerarRelatorioAviso(element.id)"  matTooltip="Aviso de Férias">
+                          <i class="material-icons">cloud_download</i>
+                        </span>
+                      </td>
+                      <td *ngIf="hasPermission('downloadReciboFeriasSRF')">
+                        <span *ngIf="habilitarAviso(element)" style="cursor: pointer;color:darkgreen"
+                          (click)="gerarRelRecibo(element.id)"  matTooltip="Recibo de Férias">
+                          <i class="material-icons">assignment_returned</i>
+                        </span>
+                      </td>
+                      <td *ngIf="hasPermission('uploadAvisoFeriasSRF')">
+                        <span *ngIf="( element.aviso && element.situacao !='Aprovado' ) || hasPermission('srf_userAdm')" style="cursor: pointer;color: darkblue"
+                          (click)="uploadFerias(element)"  matTooltip="Enviar Arquivo">
+                          <i class="material-icons">vertical_align_top</i>
+                        </span>
+                      </td>
+                      <td *ngIf="hasPermission('downloadArquivosFeriasSRF')">
+                        <span *ngIf="element.possuiArquivo=='S'" style="cursor: pointer;color: darkgreen"
+                          (click)="downloadFerias(element)"  matTooltip="Baixar Arquivo">
+                          <i class="material-icons">vertical_align_bottom</i>
+                        </span>
+                      </td>
+                      <td *ngIf="hasPermission('acessoArquivosFerias')">
+                          <span *ngIf="element.possuiArquivo=='S'" style="cursor: pointer;color:goldenrod"
+                            (click)="arquivos(element)"  matTooltip="Arquivos de Férias">
+                            <i class="material-icons">folder</i>
+                          </span>
+                        </td>
+                        <td *ngIf="hasPermission('historicoFeriasSRF')">
+                          <span style="cursor: pointer;" (click)="historico(element.id)" matTooltip="Histórico">
+                            <i class="material-icons">event_note</i>
+                          </span>
+                        </td>
+                    </table>
+                  </span>
+                </mat-cell>
+              </ng-container>
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+            <mat-paginator [length]="dados.data?.length" #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+              showFirstLastButtons   (page) = "paginatorEvent($event)"></mat-paginator>
+          </div>
+          <div [hidden]="!loading" align="center" style="width: 100%">
+            <h4>Buscando...</h4>
+            <mat-spinner [diameter]="40"></mat-spinner>
+          </div>
+          <button mat-raised-button class="btn btn-success pull-left" (click)="exportAsXLSX()"
+            [hidden]="!pesquisaAtiva || loading">
+            <img src="/assets/img/icons8-microsoft-excel-48.png" style="width:23px" />Exportar XLSX</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

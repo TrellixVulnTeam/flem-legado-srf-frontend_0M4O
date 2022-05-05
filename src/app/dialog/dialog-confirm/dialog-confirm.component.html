@@ -1,0 +1,32 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="card">
+        <div class="card-header card-header-blueflem" style="text-align:center">
+          <div class="card-title font-weight h4" align="center">
+            <table>
+              <tr>
+                <td><b>Remover marcação</b></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="card-body text-align-justify">
+          <div mat-dialog-content style="font-size: 17px;">
+            <div>
+              <div>Informe o motivo da exclusão da marcação:</div>
+              <textarea class="mdc-text-field__input" maxlength="250" rows="5" style="min-width: 100%" [(ngModel)]="data.observacao" required></textarea>
+            </div>
+          </div>
+          <div mat-dialog-actions>
+            <button mat-raised-button class="btn btn-danger pull-left" (click)="remover()">
+              <i class="material-icons">delete_forever</i>Remover</button>
+            <button mat-button (click)="onNoClick()" class="btn pull-right" style="background-color: gray;">
+              <i class="material-icons">close</i>Fechar</button>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

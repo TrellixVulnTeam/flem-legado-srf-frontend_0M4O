@@ -1,0 +1,79 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="card">
+        <div class="card-header card-header-blueflem" style="text-align:center">
+          <div class="card-title font-weight h4" align="center">
+            <table>
+              <tr>
+                <td>
+                  <b>{{title}}</b>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div [hidden]="!loading" align="center" style="width: 100%">
+          <h4>Buscando...</h4>
+          <mat-spinner [diameter]="40"></mat-spinner>
+        </div>
+        <div class="card-body text-align-justify"  [hidden]=" loading || dados.data.length == 0">
+          <div mat-dialog-content>
+              <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar">
+              </mat-form-field>
+              <mat-table #table [dataSource]="dados" #sort="matSort" matSort>
+                <ng-container matColumnDef="{{ column.id }}" *ngFor="let column of columnNames">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> {{column.value}} </mat-header-cell>
+                  <mat-cell *matCellDef="let element">
+                <div *ngIf="element != null">    
+                  <span *ngIf="column.id!='id' 
+                  &&  element.status =='ABERTO'">{{element[column.id]}}</span>
+                  <span *ngIf="column.id!='id' 
+                  && ( element.status =='APROVADO' 
+                  || element.status =='REPROVADO')"
+                    [ngStyle]="{'color':element.status === 'APROVADO' ? 'green' : 'red'}"
+                    matTooltip="{{element.dataCriacao}}">{{element[column.id]}}</span>
+                  <span *ngIf="column.id=='id'">
+                    <table>
+                      <td *ngIf="hasPermission('downloadPendenciaSRF')">
+                        <span *ngIf="element.filePath" style="cursor: pointer;" (click)="download(element)"
+                          title="Baixar">
+                          <i class="material-icons">cloud_download</i>
+                        </span>
+                      </td>
+                      <td *ngIf="hasPermission('aprovarReprovPendenciaSRF')">
+                        <span style="cursor: pointer;color: green" (click)="aprovar(element)"
+                          *ngIf="element.status != 'APROVADO'" title="Aprovar">
+                          <i class="material-icons">done</i>
+                        </span>
+                      </td>
+                      <td *ngIf="hasPermission('aprovarReprovPendenciaSRF')">
+                        <span style="cursor: pointer;color: red;" (click)="reprovar(element)"
+                          *ngIf="element.status !='REPROVADO'" title="Reprovar">
+                          <i class="material-icons">not_interested</i>
+                        </span>
+                       </td>
+                       <td *ngIf="hasPermission('histPendenciaSRF')">
+                        <span style="cursor: pointer;" (click)="historico(element.id)" title="Histórico">
+                          <i class="material-icons">event_note</i>
+                        </span>
+                      </td>
+                    </table>
+                  </span>
+                </div>
+                </mat-cell> 
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              </mat-table>
+              <mat-paginator [length]="dados.data.length" #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+          </div>
+        </div>
+        <div mat-dialog-actions>
+            <button mat-button (click)="onNoClick()" class="btn pull-right" style="background-color:grey;">Fechar</button>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>

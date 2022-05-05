@@ -1,0 +1,148 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="card">
+        <div class="card-header card-header-danger">
+          <h4 class="card-title">Administrar Férias</h4>
+          <p class="card-category">Módulo de Férias</p>
+        </div>
+        <div class="card-body">
+          <form form [formGroup]="form">
+            <div class="row">
+              <div class="col-md-2">
+                <label for="filter">Matrícula:</label>
+                <input type="number" class="form-control" formControlName="matricula" id="matricula">
+              </div>
+              <div class="col-md-5">
+                <label for="situacao">Situação</label>
+                <mat-select style="height: 50px; padding: 2px; padding-left: 10px;" formControlName="situacao"
+                  placeholder="Selecione..." name="situacao" id="situacao">
+                  <mat-option *ngFor="let item of comboSituacao" [value]="item?.situacao">
+                    {{item?.descSituacaoFerias}}
+                  </mat-option>
+                </mat-select>
+              </div>
+              <div class="col-md-2">
+                <label for="filter">Mês Ano Inicio:</label>
+                <input type="text" class="form-control" formControlName="mesAnoInicio" id="mesAnoInicio"
+                  [textMask]="{mask: mask}" required>
+              </div>
+              <div class="col-md-2">
+                <label for="filter">Mês Ano Fim:</label>
+                <input type="text" class="form-control" formControlName="mesAnoFim" id="mesAnoFim"
+                  [textMask]="{mask: mask}" required>
+              </div>
+            </div>
+            <br />
+            <div class="row">
+              <div class="col-md-5">
+                <label for="anexo">Situação do Anexo:</label>
+                <br />
+                <mat-radio-group formControlName="anexo">
+                  <mat-radio-button value="1">Com Anexo</mat-radio-button>
+                  <mat-radio-button value="2">Sem Anexo</mat-radio-button>
+                  <mat-radio-button value="3">Ambos</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <label for="anexo">Arquivos Enviados:</label>
+                <br />
+                <mat-checkbox formControlName="aviso" id="aviso">Aviso</mat-checkbox>
+                <mat-checkbox formControlName="recibo" id="recibo">Recibo</mat-checkbox>
+                <mat-checkbox formControlName="compPagto" id="compPagto">Comprovante Pagamento</mat-checkbox>
+              </div>
+            </div>
+          </form>
+          <br />
+          <app-projetos></app-projetos>
+          <div class="row">
+            <button mat-raised-button (click)="pesquisar()" class="btn btn-info pull-left">
+              <i class=" material-icons">search</i>Pesquisar</button>
+          </div>
+          <div [hidden]="!loading" align="center" style="width: 100%">
+            <h4>Buscando...</h4>
+            <mat-spinner [diameter]="40"></mat-spinner>
+          </div>
+          <div [hidden]="loading || !mostrarPesquisa" class="table-responsive">
+            <mat-form-field>
+              <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar">
+            </mat-form-field>
+            <mat-table #table [dataSource]="dados" #sort="matSort" matSort>
+              <ng-container matColumnDef="{{ column.id }}" *ngFor="let column of columnNames">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> {{column.value}} </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <span *ngIf="(!element.situacao && column.id!='acao') 
+                    &&  element.situacao !='APROVADO' 
+                    &&  element.situacao !='DOCUMENTACAO_PENDENTE'">{{element[column.id]}}</span>
+                  <span *ngIf="( element.situacao  && column.id!='acao') 
+                    && ( element.situacao =='APROVADO' 
+                    &&  element.situacao !='DOCUMENTACAO_PENDENTE' && !element.arquivoReprovado )"
+                    [ngStyle]="{'color':'green'}" matTooltip="{{element.observacao}}">{{element[column.id]}}</span>
+                  <span *ngIf="( element.situacao  && column.id!='acao') 
+                    && ( element.situacao !='APROVADO' 
+                    &&  element.situacao =='DOCUMENTACAO_PENDENTE' && !element.arquivoReprovado )"
+                    [ngStyle]="{'color':'indianred'}" matTooltip="{{element.observacao}}">{{element[column.id]}}</span>
+                  <span *ngIf="( element.situacao  && column.id!='acao') 
+                    && ( element.situacao !='APROVADO' 
+                    &&  element.situacao =='DOCUMENTACAO_PENDENTE' && element.arquivoReprovado )"
+                    [ngStyle]="{'color':'red'}" matTooltip="{{element.observacao}}">{{element[column.id]}}</span>
+                  <span *ngIf="column.id=='acao'">
+                    <table>
+                      <td *ngIf="hasPermission('srf_userAdm') || hasPermission('downloadAvisoFeriasSRF')">
+                        <span style="cursor: pointer;" (click)="gerarRelatorioAviso(element.id)"
+                          matTooltip="Aviso de Férias">
+                          <i class="material-icons">cloud_download</i>
+                        </span>
+                      </td>
+                      <td *ngIf="hasPermission('srf_userAdm') || hasPermission('downloadReciboFeriasSRF')">
+                        <span style="cursor: pointer;color:darkgreen" (click)="gerarRelRecibo(element.id)"
+                          matTooltip="Recibo de Férias">
+                          <i class="material-icons">assignment_returned</i>
+                        </span>
+                      </td>
+                      <td *ngIf="hasPermission('srf_userAdm')">
+                        <span *ngIf="element.situacao !='Aprovado' " style="cursor: pointer;color: darkblue"
+                          (click)="uploadFerias(element)" matTooltip="Enviar Arquivo">
+                          <i class="material-icons">vertical_align_top</i>
+                        </span>
+                      </td>
+                      <td
+                        *ngIf="(hasPermission('acessoArquivosFerias') && element.possuiArquivo=='S') && hasPermission('srf_userAdm')">
+                        <span style="cursor: pointer;color:goldenrod" (click)="arquivos(element)"
+                          matTooltip="Arquivos de Férias">
+                          <i class="material-icons">folder</i>
+                        </span>
+                      </td>
+                      <td *ngIf="hasPermission('historicoFeriasSRF') || hasPermission('srf_userAdm')">
+                        <span style="cursor: pointer;" (click)="historico(element.id)" matTooltip="Histórico">
+                          <i class="material-icons">event_note</i>
+                        </span>
+                      </td>
+                    </table>
+                  </span>
+                </mat-cell>
+              </ng-container>
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+            <mat-paginator [length]="dados.data.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+              (page)="paginatorEvent($event)" [pageIndex]="pageIndex" showFirstLastButtons #paginator></mat-paginator>
+            <button mat-raised-button class="btn btn-success pull-left" (click)="exportAsXLSX()"
+              [hidden]="!mostrarPesquisa || loading">
+              <img src="/assets/img/icons8-microsoft-excel-48.png" style="width:23px" />Exportar XLSX</button>
+            <button mat-raised-button class="btn pull-right" (click)="baixarEmLote()"
+              style="background:white;color:black;" [hidden]="loadingZip">
+              <img src="/assets/img/iconfinder_icon-124-document-file-zip_315084.png" style="width:23px" />Baixar Em
+              lote</button>
+            <div [hidden]="!loadingZip" align="center" style="width:200px" class="pull-right">
+              <!-- <h4>Baixando...</h4> -->
+              <mat-spinner [diameter]="40"></mat-spinner>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,169 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header card-header-danger">
+                <h3 class="card-title">Configurar Funcionários</h3>
+                <p class="card-category">Configurar os envios de alertas e se os funcionários podem ou não registrar frequência</p>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="card-body table-responsive">
+                        <mat-expansion-panel>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Informações Adicionais
+                                    <i class="material-icons">arrow_drop_down</i>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="container-fluid" style="margin-bottom: 15px">
+                                <form>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <td>
+                                                <p>
+                                                    <b>Nome:</b>
+                                                    <br /> {{funcionario.nome}}
+                                                </p>
+                                            </td>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <td>
+                                                <p>
+                                                    <b>Cargo:</b>
+                                                    <br /> {{ funcionario.cargo ? funcionario.cargo.nome : "-"}}</p>
+                                            </td>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <td>
+                                                <p>
+                                                    <b>Projeto:</b>
+                                                    <br /> {{(funcionario.projeto) ? funcionario.projeto : "-"}}
+                                                </p>
+                                            </td>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <td>
+                                                <p>
+                                                    <b>Local:</b>
+                                                    <br /> {{(funcionario.cidade && funcionario.endereco.uf) ? funcionario.cidade +
+                                      " / " + funcionario.endereco.uf : "-"}}
+                                                </p>
+                                            </td>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <td>
+                                                <p>
+                                                    <b>E-mail Principal:</b>
+                                                    <br /> {{(funcionario.email) ? funcionario.email : "-"}}</p>
+                                            </td>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <td>
+                                                <p>
+                                                    <b>Status:</b>
+                                                    <br /> {{(funcionario.situacao) ? funcionario.situacao : "-"}}</p>
+                                            </td>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <td>
+                                                <p>
+                                                    <b>Data de Admissão:</b>
+                                                    <br />
+                                                    {{(funcionario.dataAdmissao) ? funcionario.dataAdmissao : "-"}}</p>
+                                            </td>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <td>
+                                                <p>
+                                                    <b>Data de Demissão:</b>
+                                                    <br />
+                                                    {{(funcionario.dataDemissao) ? funcionario.dataDemissao : "-"}}</p>
+                                            </td>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <td>
+                                                <p>
+                                                    <b>Carga Horária Diária:</b>
+                                                    <br />
+                                                    {{(funcionario.jornadaDiariaFormatada) ? funcionario.jornadaDiariaFormatada + ' horas' : "-"}}
+                                                </p>
+                                            </td>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <td>
+                                                <p>
+                                                    <b>Carga Horária Mensal:</b>
+                                                    <br />
+                                                    {{(funcionario.horasMes) ? funcionario.horasMes + ' horas' : "-"}}
+                                                </p>
+                                            </td>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <td>
+                                                <p>
+                                                    <b>Banco de Horas:</b>
+                                                    <br />
+                                                    {{ (funcionario.totalBancoHorasFormatado) ? funcionario.totalBancoHorasFormatado : "-"}}
+                                                </p>
+                                            </td>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </mat-expansion-panel>
+                        <br />
+                        <mat-card>
+                            <mat-card-title>Configurações<span style="color: #AAAAAA;"><i class="material-icons">build</i></span></mat-card-title>
+                            <form [formGroup]="formNew">
+                                <div class="row">
+                                    <div class="col-md-3"> 
+                                        <label style="color:#607D8B">Registra Frequência?</label>    
+                                        <mat-slide-toggle formControlName="registraFrequencia" id="registraFrequencia" #registraFrequencia>{{registraFrequencia.checked | boolean : ['Sim', 'Não']}}</mat-slide-toggle>   
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label  style="color:#607D8B">Email de Inconsistência?</label>
+                                        <mat-slide-toggle formControlName="emailInconsistencia" id="emailInconsistencia" #emailInconsistencia>{{emailInconsistencia.checked | boolean : ['Sim', 'Não']}}</mat-slide-toggle>               
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label  style="color:#607D8B">Email de Falta?</label>
+                                        <mat-slide-toggle formControlName="emailFalta" id="emailFalta" #emailFalta>{{emailFalta.checked | boolean : ['Sim', 'Não']}}</mat-slide-toggle>           
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label  style="color:#607D8B">Email Frequência Não Enviada?</label>
+                                        <mat-slide-toggle formControlName="emailFrequencia" id="emailFrequencia" #emailFrequencia>{{emailFrequencia.checked | boolean : ['Sim', 'Não']}}</mat-slide-toggle>      
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label  style="color:#607D8B">Email Aviso de Férias?</label>
+                                        <mat-slide-toggle formControlName="emailAvisoFerias" id="emailAvisoFerias" #emailAvisoFerias>{{emailAvisoFerias.checked | boolean : ['Sim', 'Não']}}</mat-slide-toggle>      
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label  style="color:#607D8B">Email documento de Férias Não enviado?</label>
+                                        <mat-slide-toggle formControlName="emailDocumentoFerias" id="emailDocumentoFerias" #emailDocumentoFerias>{{emailDocumentoFerias.checked | boolean : ['Sim', 'Não']}}</mat-slide-toggle>      
+                                    </div>
+                                </div>
+                            </form>
+                        </mat-card>
+                    </div>
+                </div>
+                <button mat-raised-button (click)="salvar()" class="btn btn-info pull-left">Salvar</button>
+                <button mat-raised-button (click)="cancelar()" class="btn btn-danger pull-right">Cancelar</button>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>

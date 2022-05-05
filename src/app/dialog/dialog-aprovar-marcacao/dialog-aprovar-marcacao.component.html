@@ -1,0 +1,71 @@
+<div class="card" *ngIf="data.all">
+  <div class="card-header card-header-blueflem" style="text-align:center">
+    <div class="card-title font-weight h4" align="center">
+      <table>
+        <tr>
+          <td>
+            <b>Aprovar todas marcações</b>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="card-body text-align-justify">
+    <div mat-dialog-content style="font-size: 17px;">
+      <div>
+        <div>Observação:</div>
+        <textarea class="mdc-text-field__input" maxlength="200" rows="5" style="min-width: 100%" [(ngModel)]="data.observacao"></textarea>
+      </div>
+    </div>
+    <div [hidden]="!loading" class="container-fluid col-lg-6 col-md-12" align="center">
+      <h5>Validando...</h5>
+      <mat-spinner [diameter]="80"></mat-spinner>
+    </div>
+    <div mat-dialog-actions>
+      <button mat-raised-button class="btn btn-success pull-left" (click)="aprovarEmLote()" [hidden]="loading">
+        <i class="material-icons">done</i>Aprovar</button>
+      <button mat-button (click)="onNoClick()" class="btn pull-right" style="background-color: gray;">
+        <i class="material-icons">close</i>Fechar</button>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</div>
+
+<div class="card" *ngIf="!data.all">
+  <div class="card-header card-header-blueflem" style="text-align:center">
+    <div class="card-title font-weight h4" align="center">
+      <table>
+        <tr>
+          <td>
+            <b>Aprovar Marcações</b>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="card-body text-align-justify">
+    <div mat-dialog-content style="font-size: 17px;">
+      <table class="table table-hover">
+        <thead>
+          <th>
+            <b>Entrada:</b>{{hrEntrada}}</th>
+          <th>
+            <b>Saida:</b>{{hrSaida}}</th>
+        </thead>
+      </table>
+      <div>
+        <div>Observação:</div>
+        <textarea class="mdc-text-field__input" maxlength="200" rows="5" style="min-width: 100%" [(ngModel)]="data.marcacoes.observacao"></textarea>
+      </div>
+    </div>
+    <div mat-dialog-actions>
+      <button mat-raised-button class="btn btn-success pull-left" (click)="aprovar()" >
+        <i class="material-icons">done</i>Aprovar</button>
+      <button mat-raised-button class="btn btn-danger" (click)="reprovar()">
+        <i class="material-icons">not_interested</i>Reprovar</button>
+      <button mat-button (click)="onNoClick()" class="btn pull-right" style="background-color: gray;">
+        <i class="material-icons">close</i>Fechar</button>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</div>

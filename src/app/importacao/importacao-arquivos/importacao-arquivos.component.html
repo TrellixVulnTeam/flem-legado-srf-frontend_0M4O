@@ -1,0 +1,63 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header card-header-danger">
+        <h3 class="card-title">Importar PDF</h3>
+        <p class="card-category">Módulo que permite importação de PDF</p>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="newForm">
+          <div class="row">
+            <div class="col-md-12">
+              <label for="tipo">Tipo</label>
+              <mat-select style="height: 50px; padding: 2px; padding-left: 10px;" formControlName="tipo"
+                placeholder="Selecione..." name="tipo" id="tipo" (selectionChange)="selected($event)">
+                <mat-option *ngFor="let item of tipos" [value]="item.type">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="!select">Campo Obrigatório</mat-error>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-5">
+              <label>Anexar PDF<img src="/assets/img/pdf.png" style="width:23px" *ngIf="isAnexado" /></label>
+              <input type="file" class="form-control" formControlName="file" (change)="AquivoUpload($event)" #fileInput>
+              <mat-error *ngIf="!isAnexado">Campo Obrigatório</mat-error>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-5">
+              <button mat-raised-button class="btn btn-success pull-left" (click)="enviar()">
+                <i class="material-icons">vertical_align_top</i>Enviar</button>
+            </div>
+          </div>
+          <div *ngIf="mostrarPesquisa && !loading">
+            <mat-form-field>
+              <input matInput (keyup)="applyFilterTrabalhando($event.target.value)" placeholder="Filtrar">
+            </mat-form-field>
+            <mat-table #table [dataSource]="dados" matSort>
+              <ng-container matColumnDef="{{ column.id }}" *ngFor="let column of columnNames">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> {{column.value}} </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element[column.id]}} </mat-cell>
+              </ng-container>
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+            </mat-table>
+            <mat-paginator #paginator [length]="dados.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+              showFirstLastButtons></mat-paginator>
+          </div>
+          <div>
+            <button mat-raised-button class="btn btn-success pull-left" (click)="exportAsXLSX()" [hidden]="!mostrarPesquisa || loading">
+              <img src="/assets/img/icons8-microsoft-excel-48.png" style="width:23px" />Exportar XLSX</button>
+          </div>
+          <div *ngIf="loading" align="center" style="width: 100%">
+            <h4>Importando...</h4>
+            <mat-spinner [diameter]="40"></mat-spinner>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,108 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="card">
+                <div class="card-header card-header-danger">
+                    <h4 class="card-title">Nova Justificativa</h4>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="newForm">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <label for="descricao">Descrição:</label>
+                                <input type="text" formControlName="descricao" class="form-control" name="descricao"
+                                    id="descricao" maxlength="250" style="text-transform: uppercase">
+                                <mat-error *ngIf="!newForm.controls.descricao.valid">Campo Obrigatório</mat-error>
+                            </div>
+                            <div class="col-md-5">
+                                <label for="descricao">Prazo Em Horas:</label>
+                                <input type="number" formControlName="prazoEmHoras" class="form-control" name="prazo"
+                                    id="prazo" maxlength="3" size="5">
+                            </div>
+                            <div class="col-md-2" [hidden]="isHiddenAbonar">
+                                <label for="dias">Dias Abonados:</label>
+                                <input type="number" formControlName="dias" class="form-control" name="dias" id="dias"
+                                    maxlength="3">
+                            </div>
+                            <div class="col-md-5">
+                                <label for="justificativas">Tipo de Justificativa</label>
+                                <mat-select style="height: 50px; padding: 5px; padding-left: 15px;"
+                                    formControlName="tipo" placeholder="Selecione..." name="tipo" id="tipo">
+                                    <mat-option *ngFor="let item of comboTiposJustificativas" [value]="item.tipo">
+                                        {{item.descTipoJustificativa}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="!newForm.controls.tipo.valid">Campo Obrigatório</mat-error>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <mat-checkbox formControlName="abono" id="abono" (click)="abono()">Abonar
+                                </mat-checkbox>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-checkbox formControlName="enviaEmail" id="enviaEmail" (click)="email()">Enviar
+                                    E-mail</mat-checkbox>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-checkbox formControlName="anexo" id="anexo">Anexo</mat-checkbox>
+                            </div>
+                        </div>
+                            <button mat-raised-button (click)="save()" class="btn btn-info pull-left" [hidden]="!isHiddenEmail">Salvar</button>
+                            <button mat-raised-button (click)="cancelar()" class="btn btn-danger pull-right" [hidden]="!isHiddenEmail">Cancelar</button>
+                            <div class="clearfix"></div> 
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row" [hidden]="isHiddenEmail">
+            <div class="card">
+                <div class="card-header card-header-danger">
+                    <h4 class="card-title">Lista de Contatos</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <label for="descricao">Contatos:</label>
+                            <mat-select style="height: 50px; padding: 5px; padding-left: 15px;"
+                                placeholder="Selecione..." name="tipo" id="tipo" (change)="getContato($event)">
+                                <mat-option *ngFor="let item of options" [value]="item">
+                                    {{item.responsavel}}
+                                </mat-option>
+                            </mat-select>
+                        </div>
+                        <div class="col-md-2">
+                        <button mat-raised-button class="btn btn-info pull-left" (click)="adicionar()">
+                                <i class="material-icons">add</i>Adicionar
+                            </button>
+                        </div> 
+                    </div>
+                    
+                    <div class="row">
+                       
+                        <table class="table table-hover" id="contatos" *ngIf="listaContatosGrid.length > 0">
+                            <thead class="text-primary">
+                                <th>Nº</th>
+                                <th>Responsável</th>
+                                <th>Email</th>                             
+                                <th>Remover</th>
+                            </thead>
+                            <tbody *ngFor="let m of listaContatosGrid;let i=index">
+                                <td>{{i+1}}</td>
+                                <td>{{m.responsavel}}</td>
+                                <td>{{m.email}}</td>                              
+                                <td><span class="btn btn-danger btn-link btn-sm btn-just-icon"
+                                        (click)="removerEmail(i)"><i class="material-icons">delete</i></span></td>
+                            </tbody>
+                        </table>
+                    </div>
+                        <button mat-raised-button (click)="save()" class="btn btn-info pull-left">Salvar</button>
+                        <button mat-raised-button (click)="cancelar()"
+                            class="btn btn-danger pull-right">Cancelar</button>
+                        <div class="clearfix"></div> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

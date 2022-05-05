@@ -1,0 +1,174 @@
+<div class="main-content">
+  <div class="container-fluid">
+      
+      <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-danger">
+                    <h4 class="card-title">Projetos</h4>
+                </div>
+                <div class="card-body">
+                    <form class="filter-full-width">
+                        <mat-form-field class="filter-full-width">
+                            <input type="text" placeholder="Buscar" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
+                            <mat-autocomplete #auto="matAutocomplete" >
+                                <mat-option *ngFor="let item of filteredProjects | async" [value]="item.nome" (onSelectionChange)="getFuncionarios(item.codigoDominio)">
+                                    {{item.nome}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </form>
+                </div>
+          </div>
+        </div>
+      </div>
+
+      <div [hidden]="!loading" align="center" style="width: 100%">
+        <h4>Buscando...</h4>
+        <mat-spinner [diameter]="40"></mat-spinner>
+      </div>
+
+      <div class="row" [hidden]="loading">
+          <div class="col-lg-3 col-md-4 col-sm-4">
+              <div class="card card-stats">
+                  <div class="card-header card-header-warning card-header-icon">
+                      <div class="card-icon">
+                          <i class="material-icons">person</i>
+                      </div>
+                      <p class="card-category">Funcionários Ativos / Total</p>
+                      <h3 class="card-title">{{ totalFuncionariosAtivos }} / <span class="card-category"> {{ totalFuncionarios }}</span> </h3> 
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-4 col-sm-4">
+              <div class="card card-stats">
+                  <div class="card-header card-header-success card-header-icon">
+                      <div class="card-icon">
+                          <i class="material-icons">add</i>
+                      </div>
+                      <p class="card-category">Trabalhando</p>
+                      <h3 class="card-title">{{ funcionariosTrabalhando.length }}</h3>
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-4 col-sm-4">
+              <div class="card card-stats">
+                  <div class="card-header card-header-danger card-header-icon">
+                      <div class="card-icon">
+                          <i class="material-icons">remove</i>
+                      </div>
+                      <p class="card-category">Ativos Não Trabalhando</p>
+                      <h3 class="card-title">{{ funcionariosNaoTrabalhando.length }}</h3>
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-4 col-sm-4">
+            <div class="card card-stats">
+                <div class="card-header card-header-info card-header-icon">
+                    <div class="card-icon">
+                        <i class="material-icons">person_outline</i>
+                    </div>
+                    <p class="card-category">Funcionários Inativos / Total</p>
+                    <h3 class="card-title">{{ funcionariosInativos.length }} / <span class="card-category"> {{ totalFuncionarios }}</span> </h3>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <div class="row" [hidden]="loading">
+          <div class="col-lg-6 col-md-12" [hidden]='dataSourceTrabalhando.data.length == 0'>
+            <div class="card">
+                <div class="card-header card-header-success">
+                    <h4 class="card-title">Trabalhando
+                        <span title="Exportar" [hidden]='dataSourceTrabalhando.data.length == 0' class="pull-right" style="cursor: pointer" (click)="exportAsXLSX(dataSourceTrabalhando, 'trabalhando')">
+                            <i class="material-icons">import_export</i>
+                        </span>
+                    </h4>
+                    <p class="card-category">Funcionários Ativos com registro de frequência
+                        <span class="pull-right">{{ percentTrabalhando }} %</span>
+                    </p>
+                </div>
+                <div class="card-body table-responsive">
+                    <mat-form-field>
+                        <input matInput (keyup)="applyFilterTrabalhando($event.target.value)" placeholder="Filtrar">
+                    </mat-form-field>
+                    <mat-table #table [dataSource]="dataSourceTrabalhando" matSort>
+                        <ng-container matColumnDef="{{ column.id }}" *ngFor="let column of columnNames">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> {{column.value}} </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element[column.id]}} </mat-cell>
+                        </ng-container>
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                        
+                    </mat-table>
+                    <mat-paginator [hidden]='dataSourceTrabalhando.data.length < 6' #paginator [length]="dataSourceTrabalhando.data.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                </div>
+            </div>
+        </div>
+          <div class="col-lg-6 col-md-12" [hidden]='dataSourceNaoTrabalhando.data.length == 0'>
+              <div class="card">
+                  <div class="card-header card-header-danger">
+                      <h4 class="card-title">Não estão trabalhando
+                        <span title="Exportar" [hidden]='dataSourceNaoTrabalhando.data.length == 0' class="pull-right" style="cursor: pointer" (click)="exportAsXLSX(dataSourceNaoTrabalhando, 'naoTrabalhando')">
+                            <i class="material-icons">import_export</i>
+                        </span>
+                      </h4>
+
+                      <p class="card-category">Funcionários Ativos sem registro de frequência
+                        <span class="pull-right">{{ percentNaoTrabalhando }} %</span>
+                      </p>
+                      
+                  </div>
+                  <div class="card-body table-responsive">
+                        <mat-form-field>
+                            <input matInput (keyup)="applyFilterNaoTrabalhando($event.target.value)" placeholder="Filtrar">
+                        </mat-form-field>
+                        <mat-table #table [dataSource]="dataSourceNaoTrabalhando" #sortNaoTrabalhando="matSort" matSort>
+                            <ng-container matColumnDef="{{ column.id }}" *ngFor="let column of columnNames">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> {{column.value}} </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> 
+                                    <div *ngIf="column.id != 'acao'">
+                                        {{element[column.id]}}
+                                    </div>
+                                </mat-cell>
+                            </ng-container>
+                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                            
+                        </mat-table>
+                        <mat-paginator [hidden]='dataSourceNaoTrabalhando.data.length < 6' #paginatorNaoTrabalhando [length]="dataSourceNaoTrabalhando.data.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-6 col-md-12" [hidden]='dataSourceInativos.data.length == 0'>
+            <div class="card">
+                <div class="card-header card-header-info">
+                    <h4 class="card-title">Funcionários Inativos
+                        <span title="Exportar" [hidden]='dataSourceInativos.data.length == 0' class="pull-right" style="cursor: pointer" (click)="exportAsXLSX(dataSourceInativos, 'inativos')">
+                            <i class="material-icons">import_export</i>
+                        </span>
+                    </h4>
+                    <p class="card-category">Funcionários Inativos
+                        <span class="pull-right">{{ percentInativos }} %</span>
+                    </p>
+                </div>
+                <div class="card-body table-responsive">
+                    <mat-form-field>
+                        <input matInput (keyup)="applyFilterTrabalhando($event.target.value)" placeholder="Filtrar">
+                    </mat-form-field>
+                    <mat-table #table [dataSource]="dataSourceInativos" #sortInativos="matSort" matSort>
+                        <ng-container matColumnDef="{{ column.id }}" *ngFor="let column of columnNames">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> {{column.value}} </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element[column.id]}} </mat-cell>
+                        </ng-container>
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                        
+                    </mat-table>
+                    <mat-paginator [hidden]='dataSourceInativos.data.length < 6' #paginatorInativos [length]="dataSourceInativos.data.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                </div>
+            </div>
+        </div>
+      </div>
+  </div>
+</div>

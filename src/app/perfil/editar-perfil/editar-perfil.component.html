@@ -1,0 +1,132 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <app-funcionario></app-funcionario>
+    <div class="row">
+    <div class="card">
+      <div class="card-header card-header-danger">
+        <h3 class="card-title">Perfil</h3>
+        <p class="card-category">Módulo que exibe as informações do beneficiário para edição</p>
+      </div>
+      <div class="card-body">
+      <!-- <div style="margin-top:3%" class="col-md-12">
+            <div class="card card-profile">
+                <div class="card-avatar">
+                    <a href="#pablo">
+                        <img class="img" src="../assets/img/faces/perfil.png" />
+                    </a>
+                </div>
+                <div class="card-body">
+                    <h6 class="card-category text-gray">CEO / Co-Founder</h6>
+                    <h4 class="card-title">Alec Thompson</h4>
+                    <p class="card-description">
+                        Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
+                    </p>
+                </div>
+            </div>
+        </div> -->
+      
+        <div [hidden]="!loading" align="center" style="width: 100%">
+          <h4>Buscando...</h4>
+          <mat-spinner [diameter]="40"></mat-spinner>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <label for="filter">Email Principal:</label>
+            <input [(ngModel)]="funcionario.email" name="emailPrincipal" id="emailPrincipal" class="form-control"
+              type="email">
+          </div>
+          <div class="col-md-3">
+            <label for="filter">Email Alernativo:</label>
+            <input [(ngModel)]="funcionario.emailAlternativo" class="form-control" name="emailAlternativo"
+              id="emailAlternativo" type="email">
+          </div>
+          <div class="col-md-3">
+            <label for="filter">Telefone:</label>
+            <input placeholder="(99)9999-9999" [(ngModel)]="funcionario.telefone" name="telefone" id="telefone"
+              class="form-control" type="text" [textMask]="{mask: maskTelefone}">
+          </div>
+          <div class="col-md-3">
+            <label for="filter">Celular:</label>
+            <input placeholder="(99)9 9999-9999" [(ngModel)]="funcionario.celular" name="celular" id="celular"
+              class="form-control" type="text" [textMask]="{mask: maskCelular}">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2">
+            <label for="filter">CEP:</label>
+            <input [(ngModel)]="funcionario.cep" name="cep" id="cep" class="form-control" type="text" disabled>
+          </div>
+          <div class="col-md-4">
+            <label for="filter">Endereço:</label>
+            <input [(ngModel)]="funcionario.endereco" name="endereco" id="endereco" class="form-control" type="text"
+              disabled>
+          </div>
+          <div class="col-md-2">
+            <label for="filter">Número Endereço:</label>
+            <input [(ngModel)]="funcionario.numeroEndereco" name="numeroEndereco" id="numeroEndereco" class="form-control" type="text"
+              disabled>
+          </div>
+          <div class="col-md-4">
+            <label for="filter">Bairro:</label>
+            <input [(ngModel)]="funcionario.bairro" name="bairro" id="bairro" class="form-control" type="text" disabled>
+          </div>
+      </div>
+      <div class="row">
+        <div class="col-md-5">
+          <label for="filter">Cidade:</label>
+          <input [(ngModel)]="funcionario.cidade" name="cidade" id="cidade" class="form-control" type="text" disabled>
+        </div>
+        <div class="col-md-2">
+          <label for="filter">UF:</label>
+          <input class="form-control" [(ngModel)]="funcionario.uf" name="uf" id="uf" disabled>
+        </div>
+        <div class="col-md-5">
+          <label for="filter">Complemento:</label>
+          <input class="form-control" [(ngModel)]="funcionario.complemento" name="complemento" id="complemento"
+            disabled>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <label for="filter">Observações</label>
+          <input class="form-control" [(ngModel)]="funcionario.descricao" name="descricao" id="descricao" type="text">
+        </div>
+      </div>
+      <div class="col-md-2">
+        <mat-checkbox value="isAlterar" id="alterar" (click)="alterar()">Alterar Endereço Beneficiário
+        </mat-checkbox>
+      </div>
+      <div class="row" *ngIf="isAlterar">
+        <div class="col-md-5">
+          <label>Anexar Comprovante de Endereço</label>
+          <input type="file" class="form-control" value="file" (change)="AquivoUpload($event)" #fileInput>
+        </div>
+        <div class="col-md-5">
+          <button mat-raised-button class="btn btn-info pull-left" (click)="adicionar()" [disabled]="isAnexou">
+            <i class="material-icons">add</i>Adicionar</button>
+        </div>
+      </div>
+      <div>
+        <table class="table table-hover" id="lista" *ngIf="listaAtiva">
+          <thead class="text-primary">
+            <th style="color: dodgerblue">Arquivo</th>
+            <th style="color: dodgerblue">Remover</th>
+          </thead>
+          <tbody *ngFor="let m of lista;let i=index">
+            <td>{{m.nome}}</td>
+            <td><span class="btn btn-danger btn-link btn-sm btn-just-icon" (click)="remover(i)" title="Remover"><i
+                  class="material-icons">delete</i></span></td>
+          </tbody>
+        </table>
+      </div>
+      <button mat-button class="btn btn-success pull-left" *ngIf="!isAlterar || (isAlterar && isAnexou)" (click)="enviar()" >
+        <i class="material-icons">vertical_align_top</i>Enviar</button>
+        <button mat-button class="btn btn-warning pull-left" *ngIf="this.matricula" (click)="abrirPendencia(this.funcionario)" >
+          <i class="material-icons">vertical_align_top</i>Visualizar Pendências</button>
+          <div class="clearfix"></div>
+     </div>   
+
+    </div>
+    </div>
+  </div>
+</div>

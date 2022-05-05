@@ -1,0 +1,38 @@
+<div class="main-content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="card">
+          <div class="card-header card-header-blueflem" style="text-align:center">
+            <div class="card-title font-weight h4" align="center">
+              <table>
+                <tr>
+                  <td><b>Baixar Arquivos Férias</b></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="card-body text-align-justify">
+            <div mat-dialog-content>
+              <form [formGroup]="newForm">
+                <div class="row">
+                    <label for="filter">Tipo do Arquivo</label>
+                    <mat-select class="form-control" formControlName="tipo" placeholder="Selecione..." name="tipo">
+                        <mat-option *ngFor="let item of tipos" [value]="item">
+                            {{item}}
+                        </mat-option>
+                    </mat-select>
+                </div> 
+              </form>
+            </div>
+            <div mat-dialog-actions>
+              <button mat-button class="btn btn-success pull-left" (click)="download()">
+                <i class="material-icons">vertical_align_bottom</i>Baixar</button>
+              <button mat-button class="btn pull-right" style="background-color:grey;" (click)="onNoClick()">
+                <i class="material-icons">close</i>Fechar</button>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,40 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="card">
+                <div class="card-header card-header-danger">
+                    <h4 class="card-title">Novo Feriado</h4>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="newForm">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <label for="filter">Descrição:</label>
+                                <input type="text" formControlName="descricao" class="form-control" name="descricao"
+                                    id="descricao">
+                                <mat-error *ngIf="!newForm.controls.descricao.valid">Campo Obrigatório</mat-error>
+                            </div>
+
+                        </div>
+                        <div class="row" [hidden]="id">
+
+                            <div class="col-md-5">
+                                <label for="filter">Data</label>
+                                <input matInput [matDatepicker]="pickerData" formControlName="data" class="form-control" name="data" id="data" readonly>
+                                <mat-datepicker-toggle matSuffix [for]="pickerData"></mat-datepicker-toggle>
+                                <mat-datepicker #pickerData></mat-datepicker>
+                                <mat-error *ngIf="!newForm.controls.data.valid">Campo Obrigatório</mat-error>
+                            </div>
+
+                        </div>
+                        <button mat-raised-button (click)="save()" class="btn btn-info pull-left">Salvar</button>
+                        <button mat-raised-button (click)="cancelar()"
+                            class="btn btn-danger pull-right">Cancelar</button>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

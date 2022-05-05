@@ -1,0 +1,243 @@
+[33mcommit f4370ba57e8656ebd3db0f9ae084fae37c437ce9[m[33m ([m[1;36mHEAD -> [m[1;32mimplant[m[33m, [m[1;31morigin/implant[m[33m)[m
+Author: ermoura <edvan.reis.moura@gmail.com>
+Date:   Tue Feb 26 15:36:07 2019 -0300
+
+    merge com alterações de Thiago
+
+[33mcommit b1fb0723df415d0423c59e462fb5182230d5d598[m[33m ([m[1;31morigin/develop[m[33m, [m[1;32missue_3818[m[33m, [m[1;32mdevelop[m[33m)[m
+Author: ermoura <edvan.reis.moura@gmail.com>
+Date:   Tue Feb 26 12:21:04 2019 -0300
+
+    commit
+
+[33mcommit 553e92690b7a42631ab00572bb6cb12a09080070[m
+Author: ermoura <edvan.reis.moura@gmail.com>
+Date:   Wed Feb 20 14:37:09 2019 -0300
+
+    ajuste isFolhaValidada
+
+[33mcommit ff90df7c9db694840936b9e1313aab077e158119[m
+Author: ermoura <edvan.reis.moura@gmail.com>
+Date:   Wed Feb 20 08:41:17 2019 -0300
+
+    alterçao folhas-disponibilizada.component
+
+[33mcommit 936e34327b70d256906186d034adfbde15e9b444[m
+Author: ermoura <edvan.reis.moura@gmail.com>
+Date:   Tue Feb 19 17:03:06 2019 -0300
+
+    alterçao no frequenciasDisponibilizada e frequenciasDisponibilizadaDTO
+
+[33mcommit 0d98839c16075ad03e576cf056e681938183f79a[m
+Author: ermoura <edvan.reis.moura@gmail.com>
+Date:   Tue Feb 19 16:16:19 2019 -0300
+
+    alterçao folhas-disponibilizada.component.html grig de frequencias
+
+[33mcommit 0ac87093197bca77182ecdafae9b63d35fd54d8d[m
+Merge: e8ca7aeb d1f7c67e
+Author: ermoura <edvan.reis.moura@gmail.com>
+Date:   Tue Feb 19 15:53:14 2019 -0300
+
+    Merge branch 'develop' of https://bitbucket.org/timeflem/frequenciaclient into develop
+
+[33mcommit e8ca7aebe4c987343c2ef17a37038e0e37d84e8b[m
+Author: ermoura <edvan.reis.moura@gmail.com>
+Date:   Tue Feb 19 15:52:53 2019 -0300
+
+    merge
+
+[33mcommit d1f7c67ecff0f3d518ebab71956de99e0c4fe5cc[m
+Author: Thiago Côrtes <thiago_silvacortes@hotmail.com>
+Date:   Tue Feb 19 15:05:21 2019 -0300
+
+    alterado função ngOnInit do arquivo adnministrar-ponto.component.ts
+
+[33mcommit a051f22bd9fc0971f597e5fdda82370b83a5af87[m
+Merge: f8ec5d91 6effc12d
+Author: ermoura <edvan.reis.moura@gmail.com>
+Date:   Tue Feb 19 10:28:22 2019 -0300
+
+    Merge branch 'develop' of https://bitbucket.org/timeflem/frequenciaclient into develop
+
+[33mcommit f8ec5d9122db153a191741cdac7bf47d54e7e167[m
+Author: ermoura <edvan.reis.moura@gmail.com>
+Date:   Tue Feb 19 09:12:52 2019 -0300
+
+    merge
+
+[33mcommit 6effc12d2743c07e9ed96e09d089d7874022cd92[m
+Author: Thiago Côrtes <thiago_silvacortes@hotmail.com>
+Date:   Mon Feb 18 18:44:32 2019 -0300
+
+    alterado componente administrar-ponto para incuir somar de horas trabalhadas
+
+[33mcommit b103b9e1ba195066f0f08ba0d1a7c7c9bb63de58[m
+Author: Thiago Côrtes <thiago_silvacortes@hotmail.com>
+Date:   Sun Feb 17 10:47:59 2019 -0300
+
+    alterado componentes dialog-folha-ponto e registrar-ponto
+
+[33mcommit 34508acaf5077e2c3b92d55e0c1011d2eb8653e3[m
+Merge: 350820c1 e5127916
+Author: Thiago Côrtes <thiago_silvacortes@hotmail.com>
+Date:   Sat Feb 16 15:25:45 2019 -0300
+
+    Merge branch 'implant' into develop
+
+[33mcommit e5127916bdaada28a58c5a0db09532f70e3c36d8[m
+Author: Thiago Côrtes <thiago_silvacortes@hotmail.com>
+Date:   Sat Feb 16 15:25:23 2019 -0300
+
+    alteração no componente administrar-ponto
+
+[33mcommit 350820c1cba401bceb9bc2bcd3abdab8fc591e3a[m
+Merge: e239d656 ab51cebb
+Author: Thiago Côrtes <thiago_silvacortes@hotmail.com>
+Date:   Sat Feb 16 14:47:40 2019 -0300
+
+    alterado arquivo marcacoes-component.html e ts
+
+[33mcommit e239d656c9051bea65cbaf0e42f9741be4f0ea8b[m
+Author: Thiago Côrtes <thiago_silvacortes@hotmail.com>
+Date:   Fri Feb 15 15:21:46 2019 -0300
+
+    alterado arquivo marcacoes.component.ts no método downloadAnexoAbono
+
+[33mcommit ab51cebb3ff2a3b166d18f27da20785a56153f61[m
+Author: ermoura <edvan.reis.moura@gmail.com>
+Date:   Fri Feb 15 15:05:02 2019 -0300
+
+    alteração no carregarGrid modal dialog-folha-ponto
+
+[33mcommit 9dea8e3040fdf1542ee9071250d3052b1b5f86a9[m
+Merge: 57b320de 6a952905
+Author: ermoura <edvan.reis.moura@gmail.com>
+Date:   Thu Feb 14 15:41:52 2019 -0300
+
+    Merge branch 'develop' of https://bitbucket.org/timeflem/frequenciaclient into develop
+
+[33mcommit 57b320de1b69236f8131359927a80375fc0986e2[m
+Author: ermoura <edvan.reis.moura@gmail.com>
+Date:   Thu Feb 14 15:41:24 2019 -0300
+
+    commit merge
+
+[33mcommit 6a9529052f2f6f4cb4a77119470619b25d0bd805[m
+Merge: ca36fa72 871ad708
+Author: Thiago Côrtes <thiago_silvacortes@hotmail.com>
+Date:   Thu Feb 14 15:38:39 2019 -0300
+
+    Merge branch 'develop' of https://bitbucket.org/timeflem/frequenciaclient into develop
+
+[33mcommit ca36fa727a260758c2947fcd608487444f200eb6[m
+Author: Thiago Côrtes <thiago_silvacortes@hotmail.com>
+Date:   Thu Feb 14 15:38:04 2019 -0300
+
+    alterado componentes atestado e frequencias para baixar e salvar arquivos em pasta
+
+[33mcommit 871ad708de82ea322f65014af214eb26130fa8b1[m
+Merge: d7421b54 0c8b68c5
+Author: ermoura <edvan.reis.moura@gmail.com>
+Date:   Thu Feb 14 09:54:17 2019 -0300
+
+    Merge branch 'develop' of https://bitbucket.org/timeflem/frequenciaclient into develop
+
+[33mcommit d7421b54433f82c0abfc592d9cc6f795d7fd4b5f[m
+Author: ermoura <edvan.reis.moura@gmail.com>
+Date:   Thu Feb 14 09:53:56 2019 -0300
+
+    alteração no icone reprovar e criação do compornente projetos
+
+[33mcommit d286758314e9373e35d9a0650646be6e4e644e9f[m
+Author: ermoura <edvan.reis.moura@gmail.com>
+Date:   Wed Feb 13 15:09:10 2019 -0300
+
+    commit
+
+[33mcommit 810122855a87a019058576011aeb30f999f21117[m
+Author: ermoura <edvan.reis.moura@gmail.com>
+Date:   Wed Feb 13 12:16:17 2019 -0300
+
+    commit
+
+[33mcommit 86376e9f557e4ea2b62eecec0ef8cfb51f3b9974[m
+Author: ermoura <edvan.reis.moura@gmail.com>
+Date:   Wed Feb 13 11:33:40 2019 -0300
+
+    commit merge
+
+[33mcommit 0c8b68c5d090610ee8289f43331bb62f97795b99[m
+Author: Thiago Côrtes <thiago_silvacortes@hotmail.com>
+Date:   Tue Feb 12 12:09:15 2019 -0300
+
+    alterado arquivos marcacoes.html e feriado.js
+
+[33mcommit 5f2a05956f0cca280dab8d1e3d50961ce58cb687[m
+Author: ermoura <edvan.reis.moura@gmail.com>
+Date:   Mon Feb 11 14:48:31 2019 -0300
+
+    commit refectory
+
+[33mcommit e990a9697f588105f47040a60dd489f9de0cebe6[m
+Author: Thiago Côrtes <thiago_silvacortes@hotmail.com>
+Date:   Mon Feb 11 07:44:58 2019 -0300
+
+    alterado arquivo src/index.html
+
+[33mcommit 09d6aa142306a4280b787fc746943e793e1c9a09[m
+Merge: 6ce65bb8 b263bb91
+Author: Thiago Côrtes <thiago_silvacortes@hotmail.com>
+Date:   Sat Feb 9 13:32:40 2019 -0300
+
+    Merge branch 'implant' into develop
+
+[33mcommit b263bb91473646b83709e0aa4b16605cb808525e[m
+Author: Thiago Côrtes <thiago_silvacortes@hotmail.com>
+Date:   Sat Feb 9 13:30:11 2019 -0300
+
+    comentato no dashboard chamada para funcionários sem registros
+
+[33mcommit 6ce65bb8db86cba9062045e6d0c9973d4d957f23[m
+Author: Thiago Côrtes <thiago_silvacortes@hotmail.com>
+Date:   Sat Feb 9 11:15:36 2019 -0300
+
+    commit parcial
+
+[33mcommit 553cf6d6e1c34701a37e4d10ac51a2b38e5e7313[m
+Author: ermoura <edvan.reis.moura@gmail.com>
+Date:   Sat Feb 9 11:08:06 2019 -0300
+
+    comitado po thiago da máquina de edvan
+
+[33mcommit f33d42f2e5fa66a7af9bde77290531b9b6b36572[m
+Merge: 30e04dc1 6a5374c7
+Author: Thiago Côrtes <thiago_silvacortes@hotmail.com>
+Date:   Fri Feb 8 15:02:52 2019 -0300
+
+    Merge branch 'develop' of https://bitbucket.org/timeflem/frequenciaclient into develop
+
+[33mcommit 30e04dc1552574ed7ce2bfa606dd2b669316c1d8[m
+Author: Thiago Côrtes <thiago_silvacortes@hotmail.com>
+Date:   Fri Feb 8 15:01:59 2019 -0300
+
+    parcial
+
+[33mcommit 6a5374c7604129739a7b52ae118f07807c69442a[m
+Merge: a63b7917 997dc871
+Author: ermoura <edvan.reis.moura@gmail.com>
+Date:   Fri Feb 8 14:51:26 2019 -0300
+
+    Merge branch 'develop' of https://bitbucket.org/timeflem/frequenciaclient into develop
+
+[33mcommit a63b79177a1f32cec850d0715097a5482e091ae5[m
+Author: ermoura <edvan.reis.moura@gmail.com>
+Date:   Fri Feb 8 14:50:42 2019 -0300
+
+    criação dos metodos findByFrequenciaEnviadas e findByfrequenciaNaoEnviadas
+
+[33mcommit 997dc8714425194aef26abd811c713f0abb2d09c[m
+Author: Thiago Côrtes <thiago_silvacortes@hotmail.com>
+Date:   Thu Feb 7 15:52:06 2019 -0300
+
+    alterado componentes justificativas e

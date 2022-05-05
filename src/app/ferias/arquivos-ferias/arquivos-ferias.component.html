@@ -1,0 +1,65 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <app-funcionario></app-funcionario>
+    <div class="row">
+      <div class="card">
+        <div class="card-header card-header-danger">
+          <h4 class="card-title">Arquivos Férias</h4>
+          <p class="card-category">Aprovar e reprovar os arquivos de férias</p>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="newForm">
+            <div class="row">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="text-primary">
+                    <th>Tipo</th>
+                    <th>Situacão</th>
+                    <th>Arquivo</th>
+                    <th *ngIf="hasPermission('aprovarArqFeriasSRF')">Aprovar</th>
+                    <th *ngIf="hasPermission('reprovarArqFeriasSRF')">Reprovar</th>
+                    <th>Historico</th>
+                  </thead> 
+                  <tbody> 
+                    <tr *ngFor="let item of arquivos$ | async">
+                      <td *ngIf="item.situacao!='APROVADO' && item.situacao!='REPROVADO'" >{{ getDescricao(item.tipo) }}</td>
+                      <td *ngIf="item.situacao=='APROVADO'" style="color: green">{{ getDescricao(item.tipo) }}</td>
+                      <td *ngIf="item.situacao=='REPROVADO'" style="color:red">{{ getDescricao(item.tipo) }}</td>
+                       <td [ngStyle]="{'color':item.situacao === 'APROVADO' ? 'green' : 'red'}">
+                        {{ getStatusDescricao(item.situacao) }}</td>
+                      <td>
+                        <span style="cursor: pointer;" (click)="download(item)">
+                          <i class="material-icons">cloud_download</i>
+                        </span>
+                      </td>
+                      <td *ngIf="hasPermission('aprovarArqFeriasSRF')">
+                        <span style="cursor: pointer;color: green" (click)="aprovar(item)" *ngIf="item.situacao != 'APROVADO'">
+                          <i class="material-icons">done</i>
+                        </span>
+                      </td>
+                      <td *ngIf="hasPermission('reprovarArqFeriasSRF')">
+                        <span style="cursor: pointer;color: red;" (click)="reprovar(item)" *ngIf="item.situacao != 'APROVADO'">
+                          <i class="material-icons">not_interested</i>
+                        </span>
+                      </td>
+                      <td>
+                        <span style="cursor: pointer;" (click)="historico(item.id)">
+                          <i class="material-icons">event_note</i>
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <button mat-raised-button class="btn pull-left" (click)="baixarTodos()" style="background:white;color:black;">
+            <img src="/assets/img/iconfinder_icon-124-document-file-zip_315084.png" style="width:23px" />Baixar Todos</button>
+            <button mat-raised-button (click)="voltar()" class="btn pull-right"><i
+                class="material-icons">reply</i>Voltar</button>
+            <div class="clearfix"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

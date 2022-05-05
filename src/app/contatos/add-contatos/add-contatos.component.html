@@ -1,0 +1,57 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-danger">
+            <h4 class="card-title">{{ janela }} Contato</h4>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12">
+                <mat-radio-group [(ngModel)]="tipo" (change)="event()">
+                 <mat-radio-button value="1">Responsável</mat-radio-button>
+                  <mat-radio-button value="2">Projeto</mat-radio-button>
+                </mat-radio-group>
+                <form class="filter-full-width">
+                  <div class="col-md-12" *ngIf="proj">
+                    <mat-form-field class="filter-full-width">
+                      <input type="text" placeholder="Projeto Responsável" aria-label="Number" matInput [formControl]="myControl" style="text-transform: uppercase"
+                        [(ngModel)]="projeto" [matAutocomplete]="auto">
+                      <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let item of filteredProjects | async" [value]="item.nome"
+                          (onSelectionChange)="getProjeto(item)">
+                          {{item.nome}}
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-12" *ngIf="resp">
+                    <mat-form-field class="filter-full-width" >
+                      <input type="text" aria-label="Number" matInput placeholder="Responsável" name="responsavel" style="text-transform: uppercase"
+                        [(ngModel)]="responsavel" id="responsavel" maxlength="250" [formControl]="myControl"  [matAutocomplete]="auto">
+                        <mat-autocomplete #auto="matAutocomplete">
+                            <mat-option *ngFor="let func of filteredFunc | async" [value]="func.nome">
+                              {{ func.nome }}
+                            </mat-option>
+                          </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-12">
+                    <mat-form-field class="filter-full-width">
+                      <input type="email" aria-label="Number" matInput placeholder="E-mail" name="email"
+                        [(ngModel)]="email" id="contato" maxlength="100">
+                    </mat-form-field>
+                  </div>
+                  <button mat-raised-button (click)="salvarContatos()" class="btn btn-info pull-left">Salvar</button>
+                  <button mat-raised-button (click)="cancelar()" class="btn btn-danger pull-right">Cancelar</button>
+                  <div class="clearfix"></div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
